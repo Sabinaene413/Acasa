@@ -1,0 +1,62 @@
+<div class="min-h-screen flex flex-col bg-light-gray text-navy font-sans">
+  <!-- Navbar -->
+  <nav class="relative z-50 flex items-center justify-between px-8 py-6 bg-white shadow-md">
+    <div class="text-3xl font-bold tracking-tight text-navy">
+      Acasa
+    </div>
+    
+    <div class="flex items-center gap-6">
+      <button 
+        disabled 
+        class="px-4 py-2 font-medium text-gray-400 cursor-not-allowed opacity-60"
+      >
+        Adaugă anunț
+      </button>
+      
+      <a 
+        routerLink="/login" 
+        class="px-4 py-2 font-semibold text-navy hover:text-orange transition-colors cursor-pointer"
+      >
+        Autentificare
+      </a>
+      
+      <a 
+        routerLink="/register" 
+        class="px-8 py-3 bg-linear-to-r from-navy to-orange text-white rounded-full font-bold hover:brightness-110 hover:shadow-lg transition-all active:scale-95 cursor-pointer shadow-md"
+      >
+        Creează cont
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <main class="flex-grow flex flex-col items-center justify-center px-4 -mt-20">
+    <div class="max-w-4xl w-full text-center space-y-12">
+      <div class="space-y-4">
+        <h1 class="text-6xl md:text-7xl font-extrabold tracking-tight">
+          Găsește-ți locul <span class="text-orange">perfect</span>
+        </h1>
+        <p class="text-xl md:text-2xl text-navy/80 font-medium">
+          Cele mai bune oferte imobiliare, într-un singur loc.
+        </p>
+      </div>
+
+      <!-- Search Bar Placeholder -->
+      <div class="w-full max-w-2xl mx-auto">
+        <div class="bg-white p-2 rounded-2xl shadow-xl border-4 border-peach/30 flex items-center gap-4">
+          <div class="flex-grow h-14 bg-gray-50 rounded-xl flex items-center px-6 text-gray-400 italic">
+            Caută după locație, tip de imobil sau preț...
+          </div>
+          <div class="w-14 h-14 bg-orange rounded-xl flex items-center justify-center text-white shadow-inner">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bottom Accent -->
+  <div class="h-2 bg-peach w-full"></div>
+</div>

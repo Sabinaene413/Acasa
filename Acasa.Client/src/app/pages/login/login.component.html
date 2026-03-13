@@ -1,9 +1,44 @@
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-  
-  <input formControlName="email" type="email" placeholder="Email">
-  
-  <input formControlName="password" type="password" placeholder="Parolă">
+<div class="min-h-screen flex items-center justify-center bg-light-gray px-4">
+  <div class="max-w-md w-full bg-white p-8 rounded-3xl shadow-2xl space-y-8 border-4 border-peach/20">
+    <div class="text-center">
+      <h2 class="text-3xl font-extrabold text-navy">Bun venit înapoi</h2>
+      <p class="text-navy/60 mt-2 font-medium">Introdu datele tale pentru a accesa contul</p>
+    </div>
 
-  <button type="submit" [disabled]="loginForm.invalid">Intră în cont</button>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+      <div class="space-y-2">
+        <label class="text-sm font-bold text-navy px-1">Email</label>
+        <input 
+          formControlName="email" 
+          type="email" 
+          placeholder="nume@exemplu.ro"
+          class="w-full h-12 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400"
+        >
+      </div>
 
-</form>
+      <div class="space-y-2">
+        <label class="text-sm font-bold text-navy px-1">Parolă</label>
+        <input 
+          formControlName="password" 
+          type="password" 
+          placeholder="••••••••"
+          class="w-full h-12 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400"
+        >
+      </div>
+
+      <button 
+        type="submit" 
+        [disabled]="loginForm.invalid"
+        class="w-full h-14 bg-navy text-white rounded-xl font-bold text-lg hover:bg-orange disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed transition-all shadow-lg active:scale-95"
+      >
+        Intră în cont
+      </button>
+    </form>
+
+    <div class="pt-4 text-center border-t border-gray-100">
+      <a routerLink="/" class="text-orange font-bold hover:underline decoration-2 underline-offset-4">
+        ← Înapoi la pagina principală
+      </a>
+    </div>
+  </div>
+</div>
