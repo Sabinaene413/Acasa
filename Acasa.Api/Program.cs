@@ -22,7 +22,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllers();
@@ -42,7 +42,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("AngularPolicy");
 
-app.MapIdentityApi<IdentityUser>();
+app.MapIdentityApi<ApplicationUser>();
 
 app.UseAuthorization();
 
