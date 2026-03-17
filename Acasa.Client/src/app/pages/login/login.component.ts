@@ -39,7 +39,7 @@ export class LoginComponent {
         },
         error: (err) => {
           console.error('Eroare la logare', err);
-          alert('Email sau parolă incorectă.');
+          alert(err.message || 'Email sau parolă incorectă.');
         },
       });
     }

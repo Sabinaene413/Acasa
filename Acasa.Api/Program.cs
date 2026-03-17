@@ -1,6 +1,7 @@
 using Acasa.Api.Data;
 using Acasa.Api.Models;
 using Acasa.Api.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
@@ -48,6 +49,7 @@ builder.Services.AddOpenApi(options =>
     });
 });
 
+
 builder.Services.AddScoped<IPhotoService, PhotoService>();
 
 var app = builder.Build();
@@ -68,9 +70,10 @@ app.UseHttpsRedirection();
 
 app.UseCors("AngularPolicy");
 
-app.MapIdentityApi<ApplicationUser>();
-
+app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapIdentityApi<ApplicationUser>();
 
 app.MapControllers();
 

@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { tap, catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,22 +15,45 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   private hasToken(): boolean {
-    return !!localStorage.getItem('auth_token');
+    const token = localStorage.getItem('auth_token');
+    return !!token;
   }
 
   register(data: any) {
-    return this.http.post(`${this.apiUrl}/register`, data);
+    return this.http.post(`${this.apiUrl}/register`, data).pipe(
+      tap(res => console.log('Register response:', res)),
+      catchError(this.handleError)
+    );
   }
 
   login(data: any) {
     return this.http.post<any>(`${this.apiUrl}/login`, data).pipe(
       tap(response => {
-        if (response && response.token) {
-          localStorage.setItem('auth_token', response.token);
+        console.log('Login response received:', response);
+        // Robust token extraction
+        const token = response?.token || response?.accessToken || response?.tokenString || response?.access_token || response;
+        
+        if (typeof token === 'string' && token.length > 20) {
+          localStorage.setItem('auth_token', token);
           this.isAuthenticated.set(true);
+        } else if (response && typeof response === 'string' && response.length > 20) {
+          // If the response IS the token string itself
+          localStorage.setItem('auth_token', response);
+          this.isAuthenticated.set(true);
+        } else {
+          console.warn('No valid token found in response!', response);
         }
-      })
+      }),
+      catchError(this.handleError)
     );
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    console.error('An error occurred:', error);
+    if (error.status === 0) {
+      console.error('Could not connect to backend. Is the server running at ' + 'https://localhost:7102' + '?');
+    }
+    return throwError(() => new Error(error.error?.message || 'A apărut o eroare. Vă rugăm să încercați din nou.'));
   }
 
   logout() {

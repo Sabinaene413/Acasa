@@ -1,0 +1,47 @@
+<nav class="relative z-50 flex items-center justify-between px-8 py-6 bg-white shadow-md">
+  <div 
+    routerLink="/"
+    class="text-3xl font-bold tracking-tight text-navy cursor-pointer"
+  >
+    🏠 Acasă
+  </div>
+  
+  <div class="flex items-center gap-6">
+    @if (isAuthenticated()) {
+      <a 
+        routerLink="/add-property" 
+        class="px-4 py-2 font-medium text-navy hover:text-orange transition-colors cursor-pointer"
+      >
+        Adaugă anunț
+      </a>
+      
+      <button 
+        (click)="logout()"
+        class="px-8 py-3 bg-navy text-white rounded-full font-bold hover:bg-orange hover:shadow-lg transition-all active:scale-95 cursor-pointer shadow-md"
+      >
+        Delogare
+      </button>
+    } @else {
+      <button 
+        disabled 
+        class="px-4 py-2 font-medium text-gray-400 cursor-not-allowed opacity-60"
+      >
+        Adaugă anunț
+      </button>
+
+      <a 
+        routerLink="/login" 
+        class="px-4 py-2 font-semibold text-navy hover:text-orange transition-colors cursor-pointer"
+      >
+        Autentificare
+      </a>
+      
+      <a 
+        routerLink="/register" 
+        class="px-8 py-3 bg-linear-to-r from-navy to-orange text-white rounded-full font-bold hover:brightness-110 hover:shadow-lg transition-all active:scale-95 cursor-pointer shadow-md"
+      >
+        Creează cont
+      </a>
+    }
+  </div>
+</nav>
