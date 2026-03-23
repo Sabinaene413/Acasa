@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FormsModule } from '@angular/forms';
 import { Property, PropertyFilter } from '../../models/property.model';
+import { City } from '../../models/city.model';
 import { PropertyService } from '../../services/property.service';
+import { CityService } from '../../services/city.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -14,18 +16,29 @@ import { CommonModule } from '@angular/common';
   styleUrl: './landing-page.component.scss'
 })
 export class LandingPageComponent implements OnInit {
+  private propertyService = inject(PropertyService);
+  private cityService = inject(CityService);
+
   filter: PropertyFilter = {
     minPrice: undefined,
     maxPrice: undefined,
-    bedrooms: undefined
+    bedrooms: undefined,
+    cityId: undefined
   };
 
   properties: Property[] = [];
-
-  constructor(private propertyService: PropertyService) {}
+  cities: City[] = [];
 
   ngOnInit() {
+    this.loadCities();
     this.onSearch();
+  }
+
+  loadCities() {
+    this.cityService.getCities().subscribe({
+      next: (data) => this.cities = data,
+      error: (err) => console.error('Error loading cities:', err)
+    });
   }
 
   onSearch() {

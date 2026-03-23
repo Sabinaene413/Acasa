@@ -1,4 +1,4 @@
-<div class="min-h-screen flex flex-col bg-light-gray text-navy font-sans pt-[88px]">
+<div class="min-h-screen flex flex-col bg-light-gray text-navy font-sans pt-[64px]">
   <app-navbar></app-navbar>
 
   <main class="flex-grow py-6 md:py-10 px-4">
@@ -48,6 +48,17 @@
                     placeholder="Strada, Număr, Oraș, Județ"
                     class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
                   >
+                </div>
+
+                <div class="space-y-1.5">
+                  <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Oraș</label>
+                  <select 
+                    formControlName="cityId"
+                    class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all text-sm appearance-none cursor-pointer"
+                  >
+                    <option value="" disabled selected>Selectează un oraș</option>
+                    <option *ngFor="let city of cities()" [value]="city.id">{{ city.name }}</option>
+                  </select>
                 </div>
               </div>
             </div>

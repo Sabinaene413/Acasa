@@ -12,5 +12,7 @@ namespace Acasa.Api.Data
 
         public DbSet<Property> Properties { get; set; }
         public DbSet<PropertyImage> PropertyImages { get; set; }
+        public DbSet<County> Counties { get; set; }
+        public DbSet<City> Cities { get; set; }
     }
 }

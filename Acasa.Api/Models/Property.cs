@@ -15,8 +15,12 @@ namespace Acasa.Api.Models
         [Required]
         public string Description { get; set; } = string.Empty;
 
+
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
+
+        public int? CityId { get; set; }
+        public City? City { get; set; }
 
         [Required]
         public string Address { get; set; } = string.Empty;

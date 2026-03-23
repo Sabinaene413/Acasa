@@ -34,11 +34,9 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
-          console.log('Logare reușită!', response);
-          this.router.navigate(['/']); // Redirecționează la home după login
+          this.router.navigate(['/']); 
         },
         error: (err) => {
-          console.error('Eroare la logare', err);
           alert(err.message || 'Email sau parolă incorectă.');
         },
       });

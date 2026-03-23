@@ -1,4 +1,4 @@
-<div class="min-h-screen flex flex-col bg-light-gray text-navy font-sans pt-[88px]">
+<div class="min-h-screen flex flex-col bg-light-gray text-navy font-sans pt-[64px]">
   <app-navbar></app-navbar>
 
   <!-- Hero Section -->
@@ -14,8 +14,17 @@
       </div>
 
       <!-- Search Bar -->
-      <div class="w-full max-w-4xl mx-auto">
+      <div class="w-full max-w-5xl mx-auto">
         <form (ngSubmit)="onSearch()" class="bg-white p-4 rounded-2xl shadow-xl border-4 border-peach/30 flex flex-wrap items-center gap-4">
+          <div class="flex-grow min-w-[150px]">
+            <label class="block text-xs font-bold text-navy/60 uppercase mb-1 ml-2">Oraș</label>
+            <select [(ngModel)]="filter.cityId" name="cityId"
+              class="w-full h-12 bg-gray-50 rounded-xl px-4 text-navy border-none focus:ring-2 focus:ring-orange/50 transition-all appearance-none cursor-pointer">
+              <option [ngValue]="undefined">Toate orașele</option>
+              <option *ngFor="let city of cities" [ngValue]="city.id">{{ city.name }}</option>
+            </select>
+          </div>
+
           <div class="flex-grow min-w-[150px]">
             <label class="block text-xs font-bold text-navy/60 uppercase mb-1 ml-2">Preț Minim</label>
             <input type="number" [(ngModel)]="filter.minPrice" name="minPrice" placeholder="0 €"

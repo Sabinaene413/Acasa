@@ -45,7 +45,7 @@ export class RegisterComponent {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      // Create a clean payload (without confirmPassword)
+
       const { name, email, password } = this.registerForm.value;
       this.authService.register({ name, email, password }).subscribe({
         next: (response) => {

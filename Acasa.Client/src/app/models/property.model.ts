@@ -19,4 +19,5 @@ export interface PropertyFilter {
   minPrice?: number;
   maxPrice?: number;
   bedrooms?: number;
+  cityId?: number;
 }

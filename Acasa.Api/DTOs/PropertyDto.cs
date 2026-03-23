@@ -1,3 +1,5 @@
+using Acasa.Api.Models;
+
 namespace Acasa.Api.DTOs
 {
     public class PropertyDto
@@ -6,6 +8,7 @@ namespace Acasa.Api.DTOs
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public decimal Price { get; set; }
+        public City? City { get; set; } = null!;
         public string Address { get; set; } = string.Empty;
         public int Bedrooms { get; set; }
         public int Bathrooms { get; set; }

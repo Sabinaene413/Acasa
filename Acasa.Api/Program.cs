@@ -52,6 +52,12 @@ builder.Services.AddScoped<IPropertyService, PropertyService>();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    SeedData.Initialize(context);
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

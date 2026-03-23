@@ -1,22 +1,32 @@
-import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, RouterLinkActive, CommonModule],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss'
+  styleUrl: './navbar.component.scss',
 })
 export class NavbarComponent {
-  private authService = inject(AuthService);
-  private router = inject(Router);
-
+  authService = inject(AuthService);
+  router = inject(Router);
   isAuthenticated = this.authService.isAuthenticated;
+  isDropdownOpen = signal(false);
+
+  toggleDropdown() {
+    this.isDropdownOpen.update(v => !v);
+  }
+
+  closeDropdown() {
+    this.isDropdownOpen.set(false);
+  }
 
   logout() {
     this.authService.logout();
+    this.closeDropdown();
     this.router.navigate(['/']);
   }
 }

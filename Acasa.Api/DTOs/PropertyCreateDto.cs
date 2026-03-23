@@ -1,3 +1,4 @@
+using Acasa.Api.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Acasa.Api.DTOs
@@ -13,6 +14,8 @@ namespace Acasa.Api.DTOs
 
         [Required]
         public decimal Price { get; set; }
+
+        public int? CityId { get; set; }
 
         [Required]
         public string Address { get; set; } = string.Empty;
