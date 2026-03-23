@@ -14,3 +14,9 @@ export interface PropertyImage {
   id: number;
   url: string;
 }
+
+export interface PropertyFilter {
+  minPrice?: number;
+  maxPrice?: number;
+  bedrooms?: number;
+}

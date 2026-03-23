@@ -1,6 +1,6 @@
 ﻿using CloudinaryDotNet.Actions;
 
-namespace Acasa.Api.Services
+namespace Acasa.Api.Services.Interfaces
 {
     public interface IPhotoService
     {

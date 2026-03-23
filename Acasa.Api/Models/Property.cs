@@ -26,7 +26,7 @@ namespace Acasa.Api.Models
         public double SurfaceArea { get; set; }
 
         [Required]
-        public string UserId { get; set; } = string.Empty; // ID-ul din IdentityUser (care e string/Guid)
+        public string UserId { get; set; } = string.Empty; 
 
         [ForeignKey("UserId")]
         public virtual ApplicationUser User { get; set; } = null!;

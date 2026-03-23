@@ -1,8 +1,8 @@
-<div class="min-h-screen flex flex-col bg-light-gray text-navy font-sans">
+<div class="min-h-screen flex flex-col bg-light-gray text-navy font-sans pt-[88px]">
   <app-navbar></app-navbar>
 
   <!-- Hero Section -->
-  <main class="flex-grow flex flex-col items-center justify-center px-4 -mt-20">
+  <main class="flex-grow flex flex-col items-center justify-center px-4">
     <div class="max-w-4xl w-full text-center space-y-12">
       <div class="space-y-4">
         <h1 class="text-6xl md:text-7xl font-extrabold tracking-tight">
@@ -13,16 +13,61 @@
         </p>
       </div>
 
-      <!-- Search Bar Placeholder -->
-      <div class="w-full max-w-2xl mx-auto">
-        <div class="bg-white p-2 rounded-2xl shadow-xl border-4 border-peach/30 flex items-center gap-4">
-          <div class="flex-grow h-14 bg-gray-50 rounded-xl flex items-center px-6 text-gray-400 italic">
-            Caută după locație, tip de imobil sau preț...
+      <!-- Search Bar -->
+      <div class="w-full max-w-4xl mx-auto">
+        <form (ngSubmit)="onSearch()" class="bg-white p-4 rounded-2xl shadow-xl border-4 border-peach/30 flex flex-wrap items-center gap-4">
+          <div class="flex-grow min-w-[150px]">
+            <label class="block text-xs font-bold text-navy/60 uppercase mb-1 ml-2">Preț Minim</label>
+            <input type="number" [(ngModel)]="filter.minPrice" name="minPrice" placeholder="0 €"
+              class="w-full h-12 bg-gray-50 rounded-xl px-4 text-navy border-none focus:ring-2 focus:ring-orange/50 transition-all" />
           </div>
-          <div class="w-14 h-14 bg-orange rounded-xl flex items-center justify-center text-white shadow-inner">
+
+          <div class="flex-grow min-w-[150px]">
+            <label class="block text-xs font-bold text-navy/60 uppercase mb-1 ml-2">Preț Maxim</label>
+            <input type="number" [(ngModel)]="filter.maxPrice" name="maxPrice" placeholder="Nelimitat"
+              class="w-full h-12 bg-gray-50 rounded-xl px-4 text-navy border-none focus:ring-2 focus:ring-orange/50 transition-all" />
+          </div>
+
+          <div class="flex-grow min-w-[150px]">
+            <label class="block text-xs font-bold text-navy/60 uppercase mb-1 ml-2">Dormitoare</label>
+            <input type="number" [(ngModel)]="filter.bedrooms" name="bedrooms" placeholder="Orice"
+              class="w-full h-12 bg-gray-50 rounded-xl px-4 text-navy border-none focus:ring-2 focus:ring-orange/50 transition-all" />
+          </div>
+
+          <button type="submit" class="w-14 h-14 bg-orange rounded-xl flex items-center justify-center text-white shadow-inner hover:bg-orange/90 transition-colors mt-5">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- Results Section -->
+      <div *ngIf="properties.length > 0" class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div *ngFor="let property of properties" class="bg-white rounded-2xl shadow-lg overflow-hidden border border-peach/20 hover:shadow-2xl transition-shadow">
+          <div class="h-48 bg-gray-200 relative">
+            <img *ngIf="property.images && property.images.length > 0" [src]="property.images[0].url" class="w-full h-full object-cover" />
+            <div class="absolute top-4 right-4 bg-orange text-white px-3 py-1 rounded-full font-bold shadow-lg">
+              {{ property.price | currency:'EUR':'symbol':'1.0-0' }}
+            </div>
+          </div>
+          <div class="p-6 space-y-4">
+            <h3 class="text-xl font-bold text-navy truncate">{{ property.title }}</h3>
+            <p class="text-navy/60 text-sm line-clamp-2">{{ property.description }}</p>
+            <div class="flex items-center gap-4 text-navy/80 font-medium">
+              <div class="flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                {{ property.bedrooms }} Camere
+              </div>
+              <div class="flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                </svg>
+                {{ property.surfaceArea }} m²
+              </div>
+            </div>
           </div>
         </div>
       </div>

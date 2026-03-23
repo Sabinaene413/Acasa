@@ -1,11 +1,12 @@
-using System.Security.Claims;
 using Acasa.Api.Data;
 using Acasa.Api.DTOs;
 using Acasa.Api.Models;
 using Acasa.Api.Services;
+using Acasa.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Acasa.Api.Controllers
 {
@@ -15,11 +16,21 @@ namespace Acasa.Api.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IPhotoService _photoService;
+        private readonly IPropertyService _propertyService;
 
-        public PropertiesController(ApplicationDbContext context, IPhotoService photoService)
+        public PropertiesController(ApplicationDbContext context, IPhotoService photoService, IPropertyService propertyService)
         {
             _context = context;
             _photoService = photoService;
+            _propertyService = propertyService;
+        }
+
+        // GET: api/Properties/filter
+        [HttpGet("filter")]
+        public async Task<ActionResult> FilterProperties([FromQuery] PropertyFilterDto propertyFilterDto)
+        {
+            var result = await _propertyService.GetFilteredProperties(propertyFilterDto);
+            return Ok(result);
         }
 
         // GET: api/Properties

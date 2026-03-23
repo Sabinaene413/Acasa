@@ -1,4 +1,5 @@
-﻿using CloudinaryDotNet;
+﻿using Acasa.Api.Services.Interfaces;
+using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
 
 namespace Acasa.Api.Services

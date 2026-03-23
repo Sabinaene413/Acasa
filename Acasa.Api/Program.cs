@@ -1,17 +1,14 @@
 using Acasa.Api.Data;
 using Acasa.Api.Models;
 using Acasa.Api.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
+using Acasa.Api.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Add services to the container.
 
 builder.Services.AddCors(options =>
 {
@@ -30,7 +27,7 @@ builder.Services.AddIdentityApiEndpoints<ApplicationUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllers();
-// Configure OpenAPI with JWT support
+
 builder.Services.AddOpenApi(options =>
 {
     options.AddDocumentTransformer((document, context, cancellationToken) =>
@@ -51,18 +48,17 @@ builder.Services.AddOpenApi(options =>
 
 
 builder.Services.AddScoped<IPhotoService, PhotoService>();
+builder.Services.AddScoped<IPropertyService, PropertyService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.MapScalarApiReference(options =>
     {
-        // For Scalar 2.x, WithPreferredScheme is enough or check their new API if it fails.
-        // We'll use the working one from before.
-        options.WithPreferredScheme("Bearer");
+       // options.WithPreferredScheme("Bearer");
+        options.AddPreferredSecuritySchemes("Bearer");
     });
 }
 
