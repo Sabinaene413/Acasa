@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import {
@@ -9,6 +9,7 @@ import {
   FormGroup,
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-register',
@@ -18,12 +19,12 @@ import { AuthService } from '../../services/auth.service';
 })
 export class RegisterComponent {
   registerForm!: FormGroup;
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private toastService = inject(ToastService);
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
+  constructor() {
     this.registerForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
@@ -49,13 +50,11 @@ export class RegisterComponent {
       const { name, email, password } = this.registerForm.value;
       this.authService.register({ name, email, password }).subscribe({
         next: (response) => {
-          console.log('Înregistrare reușită!', response);
-          alert('Contul tău a fost creat cu succes!');
+          this.toastService.success('Succes', 'Contul tău a fost creat cu succes!');
           this.router.navigate(['/login']);
         },
         error: (err) => {
-          console.error('Eroare la înregistrare', err);
-          alert('A apărut o eroare la crearea contului.');
+          this.toastService.error('Eroare', 'A apărut o eroare la crearea contului.');
         },
       });
     }

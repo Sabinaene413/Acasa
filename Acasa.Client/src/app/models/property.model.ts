@@ -1,3 +1,5 @@
+import { City } from "./city.model";
+
 export interface Property {
   id?: number;
   title: string;
@@ -8,6 +10,8 @@ export interface Property {
   bathrooms: number;
   surfaceArea: number;
   images: PropertyImage[];
+  cityId: number;
+  city?: City;
 }
 
 export interface PropertyImage {

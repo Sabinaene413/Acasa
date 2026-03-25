@@ -40,4 +40,12 @@ export class PropertyService {
   createProperty(formData: FormData): Observable<Property> {
     return this.http.post<Property>(this.apiUrl, formData);
   }
+
+  updateProperty(id: number, formData: FormData): Observable<Property> {
+    return this.http.put<Property>(`${this.apiUrl}/${id}`, formData);
+  }
+
+  deleteProperty(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }

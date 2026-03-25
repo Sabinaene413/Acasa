@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import {
@@ -9,6 +9,7 @@ import {
   FormGroup,
 } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-login',
@@ -18,12 +19,12 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
   loginForm!: FormGroup;
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private toastService = inject(ToastService);
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
+  constructor() {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -37,7 +38,7 @@ export class LoginComponent {
           this.router.navigate(['/']); 
         },
         error: (err) => {
-          alert(err.message || 'Email sau parolă incorectă.');
+          this.toastService.error('Eroare la autentificare', err.message || 'Email sau parolă incorectă.');
         },
       });
     }

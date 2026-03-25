@@ -22,6 +22,7 @@ namespace Acasa.Api.Services
         {
             return await _context.Properties
                 .Include(p => p.Images)
+                .Include(p => p.City)
                 .Select(p => MapToDto(p))
                 .ToListAsync();
         }
@@ -30,6 +31,7 @@ namespace Acasa.Api.Services
         {
             var property = await _context.Properties
                 .Include(p => p.Images)
+                .Include(p => p.City)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             return property == null ? null : MapToDto(property);
@@ -123,6 +125,7 @@ namespace Acasa.Api.Services
         {
             var property = await _context.Properties
                 .Include(p => p.Images)
+                .Include(p => p.City)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (property == null || property.UserId != userId)
@@ -172,6 +175,8 @@ namespace Acasa.Api.Services
             }
 
             await _context.SaveChangesAsync();
+            await _context.Entry(property).Reference(p => p.City).LoadAsync();
+
             return MapToDto(property);
         }
 

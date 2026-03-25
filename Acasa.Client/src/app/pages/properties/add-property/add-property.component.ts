@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { Router, RouterLink } from '@angular/router';
 import { PropertyService } from '../../../services/property.service';
 import { CityService } from '../../../services/city.service';
+import { ToastService } from '../../../services/toast.service';
 import { NavbarComponent } from '../../../components/navbar/navbar.component';
 import { City } from '../../../models/city.model';
 
@@ -18,6 +19,7 @@ export class AddPropertyComponent implements OnInit {
   private propertyService = inject(PropertyService);
   private cityService = inject(CityService);
   private router = inject(Router);
+  private toastService = inject(ToastService);
 
   propertyForm: FormGroup = this.fb.group({
     title: ['', [Validators.required, Validators.minLength(5)]],
@@ -78,13 +80,12 @@ export class AddPropertyComponent implements OnInit {
       this.propertyService.createProperty(formData).subscribe({
         next: () => {
           this.isSubmitting.set(false);
-          alert('Anunțul a fost adăugat cu succes!');
+          this.toastService.success('Succes', 'Anunțul a fost adăugat cu succes!');
           this.router.navigate(['/']);
         },
         error: (err) => {
           this.isSubmitting.set(false);
-          console.error('Eroare la adăugarea anunțului', err);
-          alert('A apărut o eroare la salvarea anunțului.');
+          this.toastService.error('Eroare', 'A apărut o eroare la salvarea anunțului.');
         }
       });
     }
