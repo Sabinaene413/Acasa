@@ -60,6 +60,39 @@ namespace Acasa.Api.Controllers
                 .ToListAsync();
         }
 
+        // GET: api/Properties/my-properties
+        [HttpGet("my-properties")]
+        [Authorize]  // obligatoriu - doar userii autentificati
+        public async Task<ActionResult<IEnumerable<PropertyDto>>> GetMyProperties()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
+            var properties = await _context.Properties
+                .Where(p => p.UserId == userId)
+                .Include(p => p.Images)
+                .Select(p => new PropertyDto
+                {
+                    Id = p.Id,
+                    Title = p.Title,
+                    Description = p.Description,
+                    Price = p.Price,
+                    City = p.City,
+                    Address = p.Address,
+                    Bedrooms = p.Bedrooms,
+                    Bathrooms = p.Bathrooms,
+                    SurfaceArea = p.SurfaceArea,
+                    UserId = p.UserId,
+                    Images = p.Images!.Select(i => new PropertyImageDto
+                    {
+                        Id = i.Id,
+                        Url = i.Url
+                    }).ToList()
+                })
+                .ToListAsync();
+
+            return Ok(properties);
+        }
+
         // GET: api/Properties/5
         [HttpGet("{id}")]
         public async Task<ActionResult<PropertyDto>> GetProperty(int id)

@@ -16,8 +16,12 @@ export interface PropertyImage {
 }
 
 export interface PropertyFilter {
+  cityId?: number;
+  countyId?: number;
   minPrice?: number;
   maxPrice?: number;
+  minSurfaceArea?: number;
+  maxSurfaceArea?: number;
   bedrooms?: number;
-  cityId?: number;
+  bathrooms?: number;
 }

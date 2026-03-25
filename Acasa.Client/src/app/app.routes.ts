@@ -5,11 +5,16 @@ import { RegisterComponent } from './pages/register/register.component';
 import { AddPropertyComponent } from './pages/properties/add-property/add-property.component';
 import { authGuard } from './guards/auth.guard';
 import { ProfileComponent } from './pages/profile/profile';
+import { PropertyDetailsComponent } from './pages/properties/property-details/property-details.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: LandingPageComponent,
+  },
+  {
+    path: 'property/:id',
+    component: PropertyDetailsComponent,
   },
   {
     path: 'login',

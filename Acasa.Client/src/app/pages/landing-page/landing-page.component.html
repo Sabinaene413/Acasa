@@ -14,54 +14,125 @@
       </div>
 
       <!-- Search Bar -->
-      <div class="w-full max-w-5xl mx-auto">
-        <form (ngSubmit)="onSearch()" class="bg-white p-4 rounded-2xl shadow-xl border-4 border-peach/30 flex flex-wrap items-center gap-4">
-          <div class="flex-grow min-w-[150px]">
-            <label class="block text-xs font-bold text-navy/60 uppercase mb-1 ml-2">Oraș</label>
-            <select [(ngModel)]="filter.cityId" name="cityId"
-              class="w-full h-12 bg-gray-50 rounded-xl px-4 text-navy border-none focus:ring-2 focus:ring-orange/50 transition-all appearance-none cursor-pointer">
-              <option [ngValue]="undefined">Toate orașele</option>
-              <option *ngFor="let city of cities" [ngValue]="city.id">{{ city.name }}</option>
-            </select>
+      <div class="w-full max-w-6xl mx-auto">
+        <form (ngSubmit)="onSearch()" class="bg-white p-6 md:p-8 rounded-3xl shadow-2xl border-b-8 border-peach/40 space-y-8">
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Location Group -->
+            <div class="space-y-4">
+              <div class="relative">
+                <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1">Județ</label>
+                <select [(ngModel)]="filter.countyId" name="countyId" (change)="onCountyChange()"
+                  class="w-full h-12 bg-gray-50 rounded-2xl px-4 text-navy border-2 border-transparent focus:border-orange/20 focus:bg-white transition-all appearance-none cursor-pointer">
+                  <option [ngValue]="undefined">Toate județele</option>
+                  <option *ngFor="let county of counties" [ngValue]="county.id">{{ county.name }}</option>
+                </select>
+                <div class="absolute right-4 bottom-3 pointer-events-none text-orange">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+              <div class="relative">
+                <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1">Oraș</label>
+                <select [(ngModel)]="filter.cityId" name="cityId"
+                  class="w-full h-12 bg-gray-50 rounded-2xl px-4 text-navy border-2 border-transparent focus:border-orange/20 focus:bg-white transition-all appearance-none cursor-pointer">
+                  <option [ngValue]="undefined">Toate orașele</option>
+                  <option *ngFor="let city of cities" [ngValue]="city.id">{{ city.name }}</option>
+                </select>
+                <div class="absolute right-4 bottom-3 pointer-events-none text-orange">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Features Group -->
+            <div class="space-y-4">
+              <div class="relative">
+                <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1">Dormitoare</label>
+                <div class="flex items-center bg-gray-50 rounded-2xl border-2 border-transparent focus-within:border-orange/20 focus-within:bg-white transition-all">
+                  <span class="pl-4 text-orange">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                  </span>
+                  <input type="number" [(ngModel)]="filter.bedrooms" name="bedrooms" placeholder="Orice"
+                    class="w-full h-12 bg-transparent px-3 text-navy border-none focus:ring-0" />
+                </div>
+              </div>
+              <div class="relative">
+                <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1">Băi</label>
+                <div class="flex items-center bg-gray-50 rounded-2xl border-2 border-transparent focus-within:border-orange/20 focus-within:bg-white transition-all">
+                  <span class="pl-4 text-orange">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+                    </svg>
+                  </span>
+                  <input type="number" [(ngModel)]="filter.bathrooms" name="bathrooms" placeholder="Orice"
+                    class="w-full h-12 bg-transparent px-3 text-navy border-none focus:ring-0" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Price Range -->
+            <div class="flex flex-col justify-center px-4">
+              <label class="block text-xs font-bold text-navy/40 uppercase mb-6 ml-1">
+                Preț: <span class="text-orange font-black">{{ rangeValues[0] | currency:'EUR':'symbol':'1.0-0' }} - {{ rangeValues[1] === maxPriceLimit ? (rangeValues[1] | currency:'EUR':'symbol':'1.0-0') + '+' : (rangeValues[1] | currency:'EUR':'symbol':'1.0-0') }}</span>
+              </label>
+              <div class="px-2">
+                <p-slider [(ngModel)]="rangeValues" [range]="true" 
+                  [min]="minPriceLimit" [max]="maxPriceLimit" [step]="1000"
+                  (onChange)="onPriceRangeChange()" name="priceSlider"
+                  class="w-full">
+                </p-slider>
+              </div>
+            </div>
+
+            <!-- Surface Range -->
+            <div class="flex flex-col justify-center px-4">
+              <label class="block text-xs font-bold text-navy/40 uppercase mb-6 ml-1">
+                Suprafață: <span class="text-orange font-black">{{ surfaceRangeValues[0] }} - {{ surfaceRangeValues[1] === maxSurfaceLimit ? surfaceRangeValues[1] + '+' : surfaceRangeValues[1] }} m²</span>
+              </label>
+              <div class="px-2">
+                <p-slider [(ngModel)]="surfaceRangeValues" [range]="true" 
+                  [min]="minSurfaceLimit" [max]="maxSurfaceLimit" [step]="5"
+                  (onChange)="onSurfaceRangeChange()" name="surfaceSlider"
+                  class="w-full">
+                </p-slider>
+              </div>
+            </div>
           </div>
 
-          <div class="flex-grow min-w-[150px]">
-            <label class="block text-xs font-bold text-navy/60 uppercase mb-1 ml-2">Preț Minim</label>
-            <input type="number" [(ngModel)]="filter.minPrice" name="minPrice" placeholder="0 €"
-              class="w-full h-12 bg-gray-50 rounded-xl px-4 text-navy border-none focus:ring-2 focus:ring-orange/50 transition-all" />
+          <div class="flex justify-center pt-4 border-t border-gray-100">
+            <button type="submit" class="group relative px-12 py-4 bg-orange rounded-2xl text-white font-bold text-lg shadow-xl shadow-orange/20 hover:bg-orange/90 hover:-translate-y-1 transition-all duration-300">
+              <span class="flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 group-hover:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                Căutare Proprietăți
+              </span>
+            </button>
           </div>
-
-          <div class="flex-grow min-w-[150px]">
-            <label class="block text-xs font-bold text-navy/60 uppercase mb-1 ml-2">Preț Maxim</label>
-            <input type="number" [(ngModel)]="filter.maxPrice" name="maxPrice" placeholder="Nelimitat"
-              class="w-full h-12 bg-gray-50 rounded-xl px-4 text-navy border-none focus:ring-2 focus:ring-orange/50 transition-all" />
-          </div>
-
-          <div class="flex-grow min-w-[150px]">
-            <label class="block text-xs font-bold text-navy/60 uppercase mb-1 ml-2">Dormitoare</label>
-            <input type="number" [(ngModel)]="filter.bedrooms" name="bedrooms" placeholder="Orice"
-              class="w-full h-12 bg-gray-50 rounded-xl px-4 text-navy border-none focus:ring-2 focus:ring-orange/50 transition-all" />
-          </div>
-
-          <button type="submit" class="w-14 h-14 bg-orange rounded-xl flex items-center justify-center text-white shadow-inner hover:bg-orange/90 transition-colors mt-5">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </button>
         </form>
       </div>
 
+
       <!-- Results Section -->
       <div *ngIf="properties.length > 0" class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div *ngFor="let property of properties" class="bg-white rounded-2xl shadow-lg overflow-hidden border border-peach/20 hover:shadow-2xl transition-shadow">
-          <div class="h-48 bg-gray-200 relative">
-            <img *ngIf="property.images && property.images.length > 0" [src]="property.images[0].url" class="w-full h-full object-cover" />
+        <div *ngFor="let property of properties" 
+             [routerLink]="['/property', property.id]"
+             class="bg-white rounded-2xl shadow-lg overflow-hidden border border-peach/20 hover:shadow-2xl transition-all cursor-pointer group">
+          <div class="h-48 bg-gray-200 relative overflow-hidden">
+            <img *ngIf="property.images && property.images.length > 0" [src]="property.images[0].url" 
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
             <div class="absolute top-4 right-4 bg-orange text-white px-3 py-1 rounded-full font-bold shadow-lg">
               {{ property.price | currency:'EUR':'symbol':'1.0-0' }}
             </div>
           </div>
-          <div class="p-6 space-y-4">
-            <h3 class="text-xl font-bold text-navy truncate">{{ property.title }}</h3>
+          <div class="p-6 space-y-4 text-left">
+            <h3 class="text-xl font-bold text-navy truncate group-hover:text-orange transition-colors">{{ property.title }}</h3>
             <p class="text-navy/60 text-sm line-clamp-2">{{ property.description }}</p>
             <div class="flex items-center gap-4 text-navy/80 font-medium">
               <div class="flex items-center gap-1">

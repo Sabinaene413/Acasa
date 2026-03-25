@@ -4,15 +4,15 @@ import { tap, catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = 'https://localhost:7102'; // Verifică portul tău din appsettings.json
-  
+
   // Use Angular Signals for reactive auth state (modern Angular 17/18+)
   isAuthenticated = signal<boolean>(this.hasToken());
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   private hasToken(): boolean {
     const token = localStorage.getItem('auth_token');
@@ -21,39 +21,50 @@ export class AuthService {
 
   register(data: any) {
     return this.http.post(`${this.apiUrl}/register`, data).pipe(
-      tap(res => console.log('Register response:', res)),
-      catchError(this.handleError)
+      tap((res) => console.log('Register response:', res)),
+      catchError(this.handleError),
     );
   }
 
   login(data: any) {
-    return this.http.post<any>(`${this.apiUrl}/login`, data).pipe(
-      tap(response => {
-        console.log('Login response received:', response);
-        // Robust token extraction
-        const token = response?.token || response?.accessToken || response?.tokenString || response?.access_token || response;
-        
-        if (typeof token === 'string' && token.length > 20) {
-          localStorage.setItem('auth_token', token);
+    return this.http
+      .post<any>(`${this.apiUrl}/login?useCookies=false`, data)
+      .pipe(
+        tap((response) => {
+          localStorage.setItem('auth_token', response.accessToken);
+          localStorage.setItem('refresh_token', response.refreshToken); // salveaza si asta!
           this.isAuthenticated.set(true);
-        } else if (response && typeof response === 'string' && response.length > 20) {
-          // If the response IS the token string itself
-          localStorage.setItem('auth_token', response);
-          this.isAuthenticated.set(true);
-        } else {
-          console.warn('No valid token found in response!', response);
-        }
-      }),
-      catchError(this.handleError)
-    );
+        }),
+        catchError(this.handleError),
+      );
   }
+
+  refreshAccessToken() {
+  const refreshToken = localStorage.getItem('refresh_token');
+  return this.http.post<any>(`${this.apiUrl}/refresh`, { refreshToken }).pipe(
+    tap(response => {
+      localStorage.setItem('auth_token', response.accessToken);
+      localStorage.setItem('refresh_token', response.refreshToken);
+    })
+  );
+}
 
   private handleError(error: HttpErrorResponse) {
     console.error('An error occurred:', error);
     if (error.status === 0) {
-      console.error('Could not connect to backend. Is the server running at ' + 'https://localhost:7102' + '?');
+      console.error(
+        'Could not connect to backend. Is the server running at ' +
+          'https://localhost:7102' +
+          '?',
+      );
     }
-    return throwError(() => new Error(error.error?.message || 'A apărut o eroare. Vă rugăm să încercați din nou.'));
+    return throwError(
+      () =>
+        new Error(
+          error.error?.message ||
+            'A apărut o eroare. Vă rugăm să încercați din nou.',
+        ),
+    );
   }
 
   logout() {

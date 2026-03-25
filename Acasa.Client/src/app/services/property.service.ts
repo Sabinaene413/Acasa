@@ -14,14 +14,27 @@ export class PropertyService {
     return this.http.get<Property[]>(this.apiUrl);
   }
 
+  getProperty(id: number): Observable<Property> {
+    return this.http.get<Property>(`${this.apiUrl}/${id}`);
+  }
+
   getFilteredProperties(filter: PropertyFilter): Observable<Property[]> {
     let params = new HttpParams();
     if (filter.minPrice !== undefined && filter.minPrice !== null) params = params.set('MinPrice', filter.minPrice.toString());
     if (filter.maxPrice !== undefined && filter.maxPrice !== null) params = params.set('MaxPrice', filter.maxPrice.toString());
     if (filter.bedrooms !== undefined && filter.bedrooms !== null) params = params.set('Bedrooms', filter.bedrooms.toString());
+    if (filter.bathrooms !== undefined && filter.bathrooms !== null) params = params.set('Bathrooms', filter.bathrooms.toString());
     if (filter.cityId !== undefined && filter.cityId !== null) params = params.set('CityId', filter.cityId.toString());
+    if (filter.countyId !== undefined && filter.countyId !== null) params = params.set('CountyId', filter.countyId.toString());
+    if (filter.minSurfaceArea !== undefined && filter.minSurfaceArea !== null) params = params.set('MinSurfaceArea', filter.minSurfaceArea.toString());
+    if (filter.maxSurfaceArea !== undefined && filter.maxSurfaceArea !== null) params = params.set('MaxSurfaceArea', filter.maxSurfaceArea.toString());
 
-    return this.http.get<Property[]>(this.apiUrl, { params });
+    return this.http.get<Property[]>(`${this.apiUrl}/filter`, { params });
+  }
+
+
+  getUserProperties(): Observable<Property[]> {
+    return this.http.get<Property[]>(`${this.apiUrl}/my-properties`);
   }
 
   createProperty(formData: FormData): Observable<Property> {

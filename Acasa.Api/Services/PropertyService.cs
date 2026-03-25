@@ -34,8 +34,17 @@ namespace Acasa.Api.Services
             if (filter.MaxPrice.HasValue)
                 query = query.Where(p => p.Price <= filter.MaxPrice.Value);
 
+            if (filter.MinSurfaceArea.HasValue)
+                query = query.Where(p => p.SurfaceArea >= filter.MinSurfaceArea.Value);
+
+            if (filter.MaxSurfaceArea.HasValue)
+                query = query.Where(p => p.SurfaceArea <= filter.MaxSurfaceArea.Value);
+
             if (filter.Bedrooms.HasValue)
                 query = query.Where(p => p.Bedrooms == filter.Bedrooms.Value);
+
+            if (filter.Bathrooms.HasValue)
+                query = query.Where(p => p.Bathrooms == filter.Bathrooms.Value);
 
             return await query
                         .Select(p => new PropertyDto
