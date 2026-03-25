@@ -2,6 +2,7 @@ using Acasa.Api.Data;
 using Acasa.Api.Models;
 using Acasa.Api.Services;
 using Acasa.Api.Services.Interfaces;
+using Acasa.Api.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
