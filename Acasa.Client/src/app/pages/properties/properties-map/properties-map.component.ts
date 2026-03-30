@@ -13,6 +13,7 @@ import { Property } from '../../../models/property.model';
 import * as L from 'leaflet';
 import { NavbarComponent } from '../../../components/navbar/navbar.component';
 import { Router } from '@angular/router';
+import 'leaflet.markercluster';
 
 @Component({
   selector: 'app-properties-map',
@@ -25,7 +26,20 @@ export class PropertiesMapComponent implements OnInit, AfterViewInit {
   private propertyService = inject(PropertyService);
   private router = inject(Router);
   private map?: L.Map;
-  private markers: L.Marker[] = [];
+  private markersCluster = L.markerClusterGroup({
+    showCoverageOnHover: false,
+    maxClusterRadius: 60,
+    spiderfyOnMaxZoom: true,
+    iconCreateFunction: (cluster) => {
+      const count = cluster.getChildCount();
+      return L.divIcon({
+        html: `<div class="custom-cluster">${count}</div>`,
+        className: '',
+        iconSize: undefined,
+        iconAnchor: [20, 20],
+      });
+    },
+  });
 
   @ViewChild('mapContainer') mapContainer!: ElementRef;
 
@@ -73,10 +87,11 @@ export class PropertiesMapComponent implements OnInit, AfterViewInit {
     });
     L.Marker.prototype.options.icon = iconDefault;
 
-    this.map = L.map(this.mapContainer.nativeElement).setView(
-      [45.9432, 24.9668],
-      7,
-    );
+    this.map = L.map(this.mapContainer.nativeElement, {
+      maxZoom: 18,
+    }).setView([45.9432, 24.9668], 7);
+
+    this.map.addLayer(this.markersCluster);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution:
@@ -103,36 +118,33 @@ export class PropertiesMapComponent implements OnInit, AfterViewInit {
 
   private addMarkersToMap() {
     if (!this.map) return;
-    this.markers.forEach((m) => m.remove());
-    this.markers = [];
+    this.markersCluster.clearLayers();
 
     this.properties().forEach((property) => {
       if (property.latitude && property.longitude) {
         const priceIcon = L.divIcon({
           className: '',
           html: `
-            <div class="price-marker">
-              ${new Intl.NumberFormat('de-DE').format(property.price)} €
-             </div>
-          `,
+          <div class="price-marker">
+            ${new Intl.NumberFormat('de-DE').format(property.price)} €
+          </div>
+        `,
           iconSize: undefined,
           iconAnchor: [0, 0],
         });
 
         const marker = L.marker([property.latitude, property.longitude], {
           icon: priceIcon,
-        })
-          .addTo(this.map!)
-          .bindPopup(this.createPopupHtml(property), {
-            offset: L.point(0, -30),
-          });
-        this.markers.push(marker);
+        }).bindPopup(this.createPopupHtml(property), {
+          offset: L.point(0, -30),
+        });
+
+        this.markersCluster.addLayer(marker);
       }
     });
 
-    if (this.markers.length > 0) {
-      const group = L.featureGroup(this.markers);
-      this.map.fitBounds(group.getBounds().pad(0.1));
+    if (this.markersCluster.getLayers().length > 0) {
+      this.map.fitBounds(this.markersCluster.getBounds().pad(0.1));
     }
   }
 

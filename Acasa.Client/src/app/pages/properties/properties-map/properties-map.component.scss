@@ -34,4 +34,19 @@
       background: #ff8200 !important;
     }
   }
+
+  .custom-cluster {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ff8200;
+    color: white;
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
 }
