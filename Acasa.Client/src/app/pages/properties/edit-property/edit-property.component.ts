@@ -1,5 +1,5 @@
 import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PropertyService } from '../../../services/property.service';
@@ -14,7 +14,7 @@ import { Subject, takeUntil } from 'rxjs';
 @Component({
   selector: 'app-edit-property',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, NavbarComponent],
+  imports: [ReactiveFormsModule, RouterLink, NavbarComponent],
   templateUrl: './edit-property.component.html',
 })
 export class EditPropertyComponent implements OnInit, OnDestroy {

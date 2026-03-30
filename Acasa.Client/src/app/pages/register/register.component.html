@@ -10,71 +10,73 @@
         <!-- Nume Complet -->
         <div class="space-y-1.5">
           <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Nume Complet</label>
-          <input 
-            formControlName="name" 
-            type="text" 
+          <input
+            formControlName="name"
+            type="text"
             placeholder="Popescu Ion"
             class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
-          >
-        </div>
+            >
+          </div>
 
-        <!-- Email -->
-        <div class="space-y-1.5">
-          <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Email</label>
-          <input 
-            formControlName="email" 
-            type="email" 
-            placeholder="nume@exemplu.ro"
-            class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
-          >
-        </div>
+          <!-- Email -->
+          <div class="space-y-1.5">
+            <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Email</label>
+            <input
+              formControlName="email"
+              type="email"
+              placeholder="nume@exemplu.ro"
+              class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
+              >
+            </div>
 
-        <!-- Parolă -->
-        <div class="space-y-1.5">
-          <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Parolă</label>
-          <input 
-            formControlName="password" 
-            type="password" 
-            placeholder="••••••••"
-            class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
-          >
-        </div>
+            <!-- Parolă -->
+            <div class="space-y-1.5">
+              <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Parolă</label>
+              <input
+                formControlName="password"
+                type="password"
+                placeholder="••••••••"
+                class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
+                >
+              </div>
 
-        <!-- Confirmare Parolă -->
-        <div class="space-y-1.5 relative">
-          <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Confirmare Parolă</label>
-          <input 
-            formControlName="confirmPassword" 
-            type="password" 
-            placeholder="••••••••"
-            class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
-          >
-          <div *ngIf="registerForm.hasError('mismatch') && registerGroup('confirmPassword').touched" class="text-red-500 text-[10px] absolute mt-0.5 px-1">
-            Parolele nu coincid!
+              <!-- Confirmare Parolă -->
+              <div class="space-y-1.5 relative">
+                <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Confirmare Parolă</label>
+                <input
+                  formControlName="confirmPassword"
+                  type="password"
+                  placeholder="••••••••"
+                  class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
+                  >
+                  @if (registerForm.hasError('mismatch') && registerGroup('confirmPassword').touched) {
+                    <div class="text-red-500 text-[10px] absolute mt-0.5 px-1">
+                      Parolele nu coincid!
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <div class="pt-2">
+                <button
+                  type="submit"
+                  [disabled]="registerForm.invalid"
+                  class="w-full h-12 bg-linear-to-r from-navy to-orange text-white rounded-xl font-bold text-base md:text-lg hover:brightness-110 disabled:grayscale disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg active:scale-[0.98]"
+                  >
+                  Creează cont
+                </button>
+              </div>
+            </form>
+
+            <div class="mt-8 pt-5 text-center border-t border-gray-100 flex flex-col md:flex-row justify-center items-center gap-3 md:gap-6">
+              <p class="text-navy/70 text-sm">
+                Ai deja un cont?
+                <a routerLink="/login" class="text-orange font-bold hover:underline">Autentifică-te</a>
+              </p>
+              <div class="hidden md:block w-px h-4 bg-gray-200"></div>
+              <a routerLink="/" class="text-navy/50 font-bold hover:text-navy text-sm transition-colors">
+                ← Înapoi la început
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-
-      <div class="pt-2">
-        <button 
-          type="submit" 
-          [disabled]="registerForm.invalid"
-          class="w-full h-12 bg-linear-to-r from-navy to-orange text-white rounded-xl font-bold text-base md:text-lg hover:brightness-110 disabled:grayscale disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg active:scale-[0.98]"
-        >
-          Creează cont
-        </button>
-      </div>
-    </form>
-
-    <div class="mt-8 pt-5 text-center border-t border-gray-100 flex flex-col md:flex-row justify-center items-center gap-3 md:gap-6">
-      <p class="text-navy/70 text-sm">
-        Ai deja un cont? 
-        <a routerLink="/login" class="text-orange font-bold hover:underline">Autentifică-te</a>
-      </p>
-      <div class="hidden md:block w-px h-4 bg-gray-200"></div>
-      <a routerLink="/" class="text-navy/50 font-bold hover:text-navy text-sm transition-colors">
-        ← Înapoi la început
-      </a>
-    </div>
-  </div>
-</div>

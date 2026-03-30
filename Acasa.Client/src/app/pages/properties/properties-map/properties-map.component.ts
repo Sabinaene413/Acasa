@@ -7,7 +7,7 @@ import {
   ViewChild,
   AfterViewInit,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { PropertyService } from '../../../services/property.service';
 import { Property } from '../../../models/property.model';
 import * as L from 'leaflet';
@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-properties-map',
   standalone: true,
-  imports: [CommonModule, NavbarComponent],
+  imports: [NavbarComponent],
   templateUrl: 'properties-map.component.html',
   styleUrl: 'properties-map.component.scss',
 })

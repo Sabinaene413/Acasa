@@ -8,47 +8,51 @@
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-5">
       <div class="space-y-1.5">
         <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Email</label>
-        <input 
-          formControlName="email" 
-          type="email" 
+        <input
+          formControlName="email"
+          type="email"
           placeholder="nume@exemplu.ro"
           class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
           [class.!border-red-500]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
-        >
-        <p *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-red-500 text-[10px] px-1">Vă rugăm să introduceți un email valid.</p>
-      </div>
+          >
+          @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+            <p class="text-red-500 text-[10px] px-1">Vă rugăm să introduceți un email valid.</p>
+          }
+        </div>
 
-      <div class="space-y-1.5">
-        <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Parolă</label>
-        <input 
-          formControlName="password" 
-          type="password" 
-          placeholder="••••••••"
-          class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
-          [class.!border-red-500]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
-        >
-        <p *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-red-500 text-[10px] px-1">Parola trebuie să aibă minim 6 caractere.</p>
-      </div>
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Parolă</label>
+          <input
+            formControlName="password"
+            type="password"
+            placeholder="••••••••"
+            class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
+            [class.!border-red-500]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+            >
+            @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+              <p class="text-red-500 text-[10px] px-1">Parola trebuie să aibă minim 6 caractere.</p>
+            }
+          </div>
 
-      <div class="pt-2">
-        <button 
-          type="submit" 
-          [disabled]="loginForm.invalid"
-          class="w-full h-12 bg-linear-to-r from-navy to-orange text-white rounded-xl font-bold text-base md:text-lg hover:brightness-110 disabled:grayscale disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg active:scale-[0.98]"
-        >
-          Intră în cont
-        </button>
-      </div>
-    </form>
+          <div class="pt-2">
+            <button
+              type="submit"
+              [disabled]="loginForm.invalid"
+              class="w-full h-12 bg-linear-to-r from-navy to-orange text-white rounded-xl font-bold text-base md:text-lg hover:brightness-110 disabled:grayscale disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg active:scale-[0.98]"
+              >
+              Intră în cont
+            </button>
+          </div>
+        </form>
 
-    <div class="mt-8 pt-5 text-center border-t border-gray-100 flex flex-col gap-3">
-      <p class="text-navy/70 text-sm">
-        Nu ai un cont? 
-        <a routerLink="/register" class="text-orange font-bold hover:underline">Înregistrează-te</a>
-      </p>
-      <a routerLink="/" class="text-navy/50 font-bold hover:text-navy text-sm transition-colors">
-        ← Înapoi la început
-      </a>
+        <div class="mt-8 pt-5 text-center border-t border-gray-100 flex flex-col gap-3">
+          <p class="text-navy/70 text-sm">
+            Nu ai un cont?
+            <a routerLink="/register" class="text-orange font-bold hover:underline">Înregistrează-te</a>
+          </p>
+          <a routerLink="/" class="text-navy/50 font-bold hover:text-navy text-sm transition-colors">
+            ← Înapoi la început
+          </a>
+        </div>
+      </div>
     </div>
-  </div>
-</div>

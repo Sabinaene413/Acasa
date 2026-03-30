@@ -1,5 +1,5 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { PropertyService } from '../../../services/property.service';
@@ -11,7 +11,7 @@ import { City } from '../../../models/city.model';
 @Component({
   selector: 'app-add-property',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, NavbarComponent],
+  imports: [ReactiveFormsModule, RouterLink, NavbarComponent],
   templateUrl: './add-property.component.html',
 })
 export class AddPropertyComponent implements OnInit {
