@@ -50,6 +50,8 @@ builder.Services.AddOpenApi(options =>
 
 builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddScoped<IPropertyService, PropertyService>();
+builder.Services.AddHttpClient<GeocodingService>();
+builder.Services.AddScoped<IGeocodingService, GeocodingService>();
 
 var app = builder.Build();
 

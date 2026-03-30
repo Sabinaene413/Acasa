@@ -7,11 +7,16 @@ import { EditPropertyComponent } from './pages/properties/edit-property/edit-pro
 import { authGuard } from './guards/auth.guard';
 import { ProfileComponent } from './pages/profile/profile';
 import { PropertyDetailsComponent } from './pages/properties/property-details/property-details.component';
+import { PropertiesMapComponent } from './pages/properties/properties-map/properties-map.component';
 
 export const routes: Routes = [
   {
     path: '',
     component: LandingPageComponent,
+  },
+  {
+    path: 'map',
+    component: PropertiesMapComponent,
   },
   {
     path: 'property/:id',

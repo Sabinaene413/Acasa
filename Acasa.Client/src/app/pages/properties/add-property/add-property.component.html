@@ -27,7 +27,9 @@
                     type="text" 
                     placeholder="Ex: Apartament 3 camere, zona centrală"
                     class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
+                    [class.!border-red-500]="isInvalid('title')"
                   >
+                  <p *ngIf="isInvalid('title')" class="text-red-500 text-[10px] px-1">Minim 5 caractere sunt necesare.</p>
                 </div>
 
                 <div class="space-y-1.5">
@@ -37,7 +39,9 @@
                     rows="4"
                     placeholder="Descrie proprietatea, facilitățile și zona..."
                     class="w-full p-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm resize-none"
+                    [class.!border-red-500]="isInvalid('description')"
                   ></textarea>
+                  <p *ngIf="isInvalid('description')" class="text-red-500 text-[10px] px-1">Minim 20 de caractere sunt necesare.</p>
                 </div>
 
                 <div class="space-y-1.5">
@@ -47,7 +51,9 @@
                     type="text" 
                     placeholder="Strada, Număr, Oraș, Județ"
                     class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
+                    [class.!border-red-500]="isInvalid('address')"
                   >
+                  <p *ngIf="isInvalid('address')" class="text-red-500 text-[10px] px-1">Adresa este obligatorie.</p>
                 </div>
 
                 <div class="space-y-1.5">
@@ -55,10 +61,12 @@
                   <select 
                     formControlName="cityId"
                     class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all text-sm appearance-none cursor-pointer"
+                    [class.!border-red-500]="isInvalid('cityId')"
                   >
                     <option value="" disabled selected>Selectează un oraș</option>
                     <option *ngFor="let city of cities()" [value]="city.id">{{ city.name }}</option>
                   </select>
+                  <p *ngIf="isInvalid('cityId')" class="text-red-500 text-[10px] px-1">Orașul este obligatoriu.</p>
                 </div>
               </div>
             </div>
@@ -77,6 +85,7 @@
                     formControlName="price" 
                     type="number" 
                     class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all text-sm"
+                    [class.!border-red-500]="isInvalid('price')"
                   >
                 </div>
 
@@ -86,6 +95,7 @@
                     formControlName="surfaceArea" 
                     type="number" 
                     class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all text-sm"
+                    [class.!border-red-500]="isInvalid('surfaceArea')"
                   >
                 </div>
 
@@ -103,6 +113,26 @@
                   <input 
                     formControlName="bathrooms" 
                     type="number" 
+                    class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all text-sm"
+                  >
+                </div>
+
+                <div class="space-y-1.5">
+                  <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Latitudine (Opțional)</label>
+                  <input 
+                    formControlName="latitude" 
+                    type="number" step="any"
+                    placeholder="44.4268"
+                    class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all text-sm"
+                  >
+                </div>
+
+                <div class="space-y-1.5">
+                  <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Longitudine (Opțional)</label>
+                  <input 
+                    formControlName="longitude" 
+                    type="number" step="any"
+                    placeholder="26.1025"
                     class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all text-sm"
                   >
                 </div>

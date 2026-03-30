@@ -7,6 +7,21 @@
   </div>
   
   <div class="flex items-center gap-4">
+    <a 
+      routerLink="/" 
+      [routerLinkActiveOptions]="{exact: true}"
+      routerLinkActive="text-orange"
+      class="px-3 py-1.5 text-sm font-semibold text-navy hover:text-orange transition-colors cursor-pointer"
+    >
+      Explorează
+    </a>
+    <a 
+      routerLink="/map" 
+      routerLinkActive="text-orange"
+      class="px-3 py-1.5 text-sm font-semibold text-navy hover:text-orange transition-colors cursor-pointer"
+    >
+      Hartă
+    </a>
     @if (isAuthenticated()) {
       <a 
         routerLink="/add-property" 

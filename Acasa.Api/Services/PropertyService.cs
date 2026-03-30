@@ -11,20 +11,23 @@ namespace Acasa.Api.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IPhotoService _photoService;
+        private readonly IGeocodingService _geocodingService;
 
-        public PropertyService(ApplicationDbContext context, IPhotoService photoService)
+        public PropertyService(ApplicationDbContext context, IPhotoService photoService, IGeocodingService geocodingService)
         {
             _context = context;
             _photoService = photoService;
+            _geocodingService = geocodingService;
         }
 
         public async Task<IEnumerable<PropertyDto>> GetPropertiesAsync()
         {
-            return await _context.Properties
+            var properties = await _context.Properties
                 .Include(p => p.Images)
                 .Include(p => p.City)
-                .Select(p => MapToDto(p))
                 .ToListAsync();
+
+            return properties.Select(p => MapToDto(p));
         }
 
         public async Task<PropertyDto?> GetPropertyByIdAsync(int id)
@@ -39,11 +42,13 @@ namespace Acasa.Api.Services
 
         public async Task<IEnumerable<PropertyDto>> GetMyPropertiesAsync(string userId)
         {
-            return await _context.Properties
+            var properties = await _context.Properties
                 .Where(p => p.UserId == userId)
                 .Include(p => p.Images)
-                .Select(p => MapToDto(p))
+                .Include(p => p.City)
                 .ToListAsync();
+
+            return properties.Select(p => MapToDto(p));
         }
 
         public async Task<IEnumerable<PropertyDto>> GetFilteredPropertiesAsync(PropertyFilterDto filter)
@@ -53,6 +58,7 @@ namespace Acasa.Api.Services
 
             var query = _context.Properties
                 .Include(p => p.Images)
+                .Include(p => p.City)
                 .AsQueryable();
 
             if (filter.CityId.HasValue)
@@ -79,9 +85,8 @@ namespace Acasa.Api.Services
             if (filter.Bathrooms.HasValue)
                 query = query.Where(p => p.Bathrooms == filter.Bathrooms.Value);
 
-            return await query
-                        .Select(p => MapToDto(p))
-                .ToListAsync();
+            var properties = await query.ToListAsync();
+            return properties.Select(p => MapToDto(p));
         }
 
         public async Task<PropertyDto> CreatePropertyAsync(PropertyCreateDto propertyCreateDto, string userId)
@@ -115,8 +120,25 @@ namespace Acasa.Api.Services
                 }
             }
 
+            var cityName = "";
+            if (property.CityId.HasValue)
+            {
+                var city = await _context.Cities.FindAsync(property.CityId);
+                cityName = city?.Name ?? "";
+            }
+
+            var (lat, lng) = await _geocodingService.GeocodeAsync(property.Address, cityName);
+            property.Latitude = lat;
+            property.Longitude = lng;
+
             _context.Properties.Add(property);
             await _context.SaveChangesAsync();
+
+            // Load the city if it was just added to ensure MapToDto gets it
+            if (property.CityId.HasValue && property.City == null)
+            {
+                await _context.Entry(property).Reference(p => p.City).LoadAsync();
+            }
 
             return MapToDto(property);
         }
@@ -174,8 +196,24 @@ namespace Acasa.Api.Services
                 }
             }
 
+            var cityName = "";
+            if (property.CityId.HasValue)
+            {
+                var city = await _context.Cities.FindAsync(property.CityId);
+                cityName = city?.Name ?? "";
+            }
+
+            var (lat, lng) = await _geocodingService.GeocodeAsync(property.Address, cityName);
+            property.Latitude = lat;
+            property.Longitude = lng;
+
             await _context.SaveChangesAsync();
-            await _context.Entry(property).Reference(p => p.City).LoadAsync();
+            
+            // Reload the city to ensure it matches the new CityId
+            if (property.CityId.HasValue)
+            {
+                await _context.Entry(property).Reference(p => p.City).LoadAsync();
+            }
 
             return MapToDto(property);
         }
@@ -217,6 +255,8 @@ namespace Acasa.Api.Services
                 Bathrooms = property.Bathrooms,
                 SurfaceArea = property.SurfaceArea,
                 UserId = property.UserId,
+                Latitude = property.Latitude,
+                Longitude = property.Longitude,
                 Images = property.Images.Select(i => new PropertyImageDto
                 {
                     Id = i.Id,

@@ -30,7 +30,14 @@ export class AddPropertyComponent implements OnInit {
     bedrooms: [0, [Validators.required, Validators.min(0)]],
     bathrooms: [0, [Validators.required, Validators.min(0)]],
     surfaceArea: [0, [Validators.required, Validators.min(1)]],
+    latitude: [null, [Validators.min(-90), Validators.max(90)]],
+    longitude: [null, [Validators.min(-180), Validators.max(180)]],
   });
+
+  isInvalid(controlName: string) {
+    const control = this.propertyForm.get(controlName);
+    return control && control.invalid && (control.dirty || control.touched);
+  }
 
   cities = signal<City[]>([]);
   selectedFiles = signal<File[]>([]);

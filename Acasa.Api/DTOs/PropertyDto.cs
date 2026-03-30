@@ -15,6 +15,8 @@ namespace Acasa.Api.DTOs
         public double SurfaceArea { get; set; }
         public string UserId { get; set; } = string.Empty;
         public List<PropertyImageDto> Images { get; set; } = new();
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
     }
 
     public class PropertyImageDto

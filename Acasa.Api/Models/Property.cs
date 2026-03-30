@@ -37,5 +37,8 @@ namespace Acasa.Api.Models
 
         public virtual ICollection<PropertyImage> Images { get; set; } = new List<PropertyImage>();
 
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+
     }
 }

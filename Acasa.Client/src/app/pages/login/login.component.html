@@ -13,7 +13,9 @@
           type="email" 
           placeholder="nume@exemplu.ro"
           class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
+          [class.!border-red-500]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
         >
+        <p *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="text-red-500 text-[10px] px-1">Vă rugăm să introduceți un email valid.</p>
       </div>
 
       <div class="space-y-1.5">
@@ -23,7 +25,9 @@
           type="password" 
           placeholder="••••••••"
           class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
+          [class.!border-red-500]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
         >
+        <p *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-red-500 text-[10px] px-1">Parola trebuie să aibă minim 6 caractere.</p>
       </div>
 
       <div class="pt-2">

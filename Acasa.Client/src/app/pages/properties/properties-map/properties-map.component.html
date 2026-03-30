@@ -1,0 +1,11 @@
+  <app-navbar></app-navbar>
+    <div class="pt-16 h-screen flex flex-col">
+      <div class="flex-1 relative">
+        <div #mapContainer class="absolute inset-0 z-0"></div>
+        @if (isLoading()) {
+          <div class="absolute inset-0 z-10 bg-white/50 flex items-center justify-center backdrop-blur-sm">
+            <div class="animate-spin rounded-full h-12 w-12 border-4 border-orange border-t-transparent"></div>
+          </div>
+        }
+      </div>
+    </div>

@@ -12,6 +12,8 @@ export interface Property {
   images: PropertyImage[];
   cityId: number;
   city?: City;
+  latitude?: number;
+  longitude?: number;
 }
 
 export interface PropertyImage {
