@@ -1,7 +1,8 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { tap, catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { CurrentUser } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
@@ -40,14 +41,14 @@ export class AuthService {
   }
 
   refreshAccessToken() {
-  const refreshToken = localStorage.getItem('refresh_token');
-  return this.http.post<any>(`${this.apiUrl}/refresh`, { refreshToken }).pipe(
-    tap(response => {
-      localStorage.setItem('auth_token', response.accessToken);
-      localStorage.setItem('refresh_token', response.refreshToken);
-    })
-  );
-}
+    const refreshToken = localStorage.getItem('refresh_token');
+    return this.http.post<any>(`${this.apiUrl}/refresh`, { refreshToken }).pipe(
+      tap((response) => {
+        localStorage.setItem('auth_token', response.accessToken);
+        localStorage.setItem('refresh_token', response.refreshToken);
+      }),
+    );
+  }
 
   private handleError(error: HttpErrorResponse) {
     console.error('An error occurred:', error);
@@ -75,5 +76,9 @@ export class AuthService {
 
   getToken() {
     return localStorage.getItem('auth_token');
+  }
+
+  getCurrentUser(): Observable<{ userId: string }> {
+    return this.http.get<{ userId: string }>(`${this.apiUrl}/api/account/me`);
   }
 }

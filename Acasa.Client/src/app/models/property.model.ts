@@ -2,6 +2,7 @@ import { City } from "./city.model";
 
 export interface Property {
   id?: number;
+  userId?: string;
   title: string;
   description: string;
   price: number;

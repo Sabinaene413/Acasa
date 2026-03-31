@@ -1,6 +1,11 @@
 import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PropertyService } from '../../../services/property.service';
 import { CityService } from '../../../services/city.service';
@@ -8,8 +13,8 @@ import { ToastService } from '../../../services/toast.service';
 import { NavbarComponent } from '../../../components/navbar/navbar.component';
 import { City } from '../../../models/city.model';
 import { Property, PropertyImage } from '../../../models/property.model';
-import { Subject, takeUntil } from 'rxjs';
-
+import { forkJoin, map, Subject, switchMap, takeUntil } from 'rxjs';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-edit-property',
@@ -21,6 +26,7 @@ export class EditPropertyComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private propertyService = inject(PropertyService);
   private cityService = inject(CityService);
+  private authService = inject(AuthService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private toastService = inject(ToastService);
@@ -43,7 +49,7 @@ export class EditPropertyComponent implements OnInit, OnDestroy {
   existingImages = signal<PropertyImage[]>([]);
   newFiles = signal<File[]>([]);
   newPreviews = signal<string[]>([]);
-  imagesToDelete= signal<number[]>([]);
+  imagesToDelete = signal<number[]>([]);
   isSubmitting = signal<boolean>(false);
   isLoading = signal<boolean>(true);
 
@@ -53,22 +59,46 @@ export class EditPropertyComponent implements OnInit, OnDestroy {
   }
 
   private loadCities() {
-    this.cityService.getCities()
-    .pipe(takeUntil(this.destroy$))
-    .subscribe({
-      next: (data) => { 
-        this.cities.set(data)
-       },
-      error: (err) => console.error('Error loading cities:', err)
-    });
+    this.cityService
+      .getCities()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (data) => {
+          this.cities.set(data);
+        },
+        error: (err) => console.error('Error loading cities:', err),
+      });
   }
 
   private loadProperty() {
     const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.propertyId = +id;
-      this.propertyService.getProperty(this.propertyId).subscribe({
-        next: (property) => {
+    if (!id) return;
+    this.propertyId = +id;
+
+    this.authService
+      .getCurrentUser()
+      .pipe(
+        switchMap((me) =>
+          this.propertyService
+            .getProperty(this.propertyId!)
+            .pipe(map((property) => ({ property, me }))),
+        ),
+        takeUntil(this.destroy$),
+      )
+      .subscribe({
+        next: ({ property, me }) => {
+          console.log('property.userId:', JSON.stringify(property.userId));
+          console.log('me.userId:', JSON.stringify(me.userId));
+          console.log('sunt egale:', property.userId === me.userId);
+
+          if (property.userId !== me.userId) {
+            this.toastService.error(
+              'Eroare',
+              'Nu ai permisiunea să editezi această proprietate.',
+            );
+            this.router.navigate(['/']);
+            return;
+          }
           this.propertyForm.patchValue({
             title: property.title,
             description: property.description,
@@ -83,23 +113,25 @@ export class EditPropertyComponent implements OnInit, OnDestroy {
           this.isLoading.set(false);
         },
         error: (err) => {
-          console.error('Error loading property:', err);
-          this.toastService.error('Eroare', 'Nu s-a putut încărca proprietatea.');
+          console.log('eroare:', err);
+          this.toastService.error(
+            'Eroare',
+            'Nu s-a putut încărca proprietatea.',
+          );
           this.router.navigate(['/contul-meu']);
-        }
+        },
       });
-    }
   }
 
   onFileChange(event: any) {
     const files = Array.from(event.target.files as FileList);
     if (files.length > 0) {
-      this.newFiles.update(current => [...current, ...files]);
-      
-      files.forEach(file => {
+      this.newFiles.update((current) => [...current, ...files]);
+
+      files.forEach((file) => {
         const reader = new FileReader();
         reader.onload = (e: any) => {
-          this.newPreviews.update(current => [...current, e.target.result]);
+          this.newPreviews.update((current) => [...current, e.target.result]);
         };
         reader.readAsDataURL(file);
       });
@@ -107,22 +139,24 @@ export class EditPropertyComponent implements OnInit, OnDestroy {
   }
 
   removeExistingImage(imageId: number) {
-    this.imagesToDelete.update(current => [...current, imageId]);
-    this.existingImages.update(current => current.filter(img => img.id !== imageId));
+    this.imagesToDelete.update((current) => [...current, imageId]);
+    this.existingImages.update((current) =>
+      current.filter((img) => img.id !== imageId),
+    );
   }
 
   removeNewImage(index: number) {
-    this.newFiles.update(current => current.filter((_, i) => i !== index));
-    this.newPreviews.update(current => current.filter((_, i) => i !== index));
+    this.newFiles.update((current) => current.filter((_, i) => i !== index));
+    this.newPreviews.update((current) => current.filter((_, i) => i !== index));
   }
 
   onSubmit() {
-    if(this.propertyForm.invalid) {
+    if (this.propertyForm.invalid) {
       this.propertyForm.markAllAsTouched();
       return;
     }
 
-    if(!this.propertyId) return;
+    if (!this.propertyId) return;
 
     this.isSubmitting.set(true);
     const formData = new FormData();
@@ -133,11 +167,11 @@ export class EditPropertyComponent implements OnInit, OnDestroy {
       formData.append(key, String(val));
     });
 
-    this.newFiles().forEach(file => {
+    this.newFiles().forEach((file) => {
       formData.append('newImages', file);
     });
 
-    this.imagesToDelete().forEach(id => {
+    this.imagesToDelete().forEach((id) => {
       formData.append('imagesToDelete', String(id));
     });
 
@@ -150,15 +184,12 @@ export class EditPropertyComponent implements OnInit, OnDestroy {
       error: () => {
         this.isSubmitting.set(false);
         this.toastService.error('Eroare', 'A aparut o eroare');
-      }
+      },
     });
   }
 
-    ngOnDestroy(): void {
-
+  ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 }
-
-
