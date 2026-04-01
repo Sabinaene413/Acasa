@@ -7,76 +7,102 @@
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+
         <!-- Nume Complet -->
         <div class="space-y-1.5">
           <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Nume Complet</label>
-          <input
-            formControlName="name"
-            type="text"
-            placeholder="Popescu Ion"
+          <input formControlName="name" type="text" placeholder="Popescu Ion"
             class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
-            >
-          </div>
-
-          <!-- Email -->
-          <div class="space-y-1.5">
-            <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Email</label>
-            <input
-              formControlName="email"
-              type="email"
-              placeholder="nume@exemplu.ro"
-              class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
-              >
-            </div>
-
-            <!-- Parolă -->
-            <div class="space-y-1.5">
-              <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Parolă</label>
-              <input
-                formControlName="password"
-                type="password"
-                placeholder="••••••••"
-                class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
-                >
-              </div>
-
-              <!-- Confirmare Parolă -->
-              <div class="space-y-1.5 relative">
-                <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Confirmare Parolă</label>
-                <input
-                  formControlName="confirmPassword"
-                  type="password"
-                  placeholder="••••••••"
-                  class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
-                  >
-                  @if (registerForm.hasError('mismatch') && registerGroup('confirmPassword').touched) {
-                    <div class="text-red-500 text-[10px] absolute mt-0.5 px-1">
-                      Parolele nu coincid!
-                    </div>
-                  }
-                </div>
-              </div>
-
-              <div class="pt-2">
-                <button
-                  type="submit"
-                  [disabled]="registerForm.invalid"
-                  class="w-full h-12 bg-linear-to-r from-navy to-orange text-white rounded-xl font-bold text-base md:text-lg hover:brightness-110 disabled:grayscale disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg active:scale-[0.98]"
-                  >
-                  Creează cont
-                </button>
-              </div>
-            </form>
-
-            <div class="mt-8 pt-5 text-center border-t border-gray-100 flex flex-col md:flex-row justify-center items-center gap-3 md:gap-6">
-              <p class="text-navy/70 text-sm">
-                Ai deja un cont?
-                <a routerLink="/login" class="text-orange font-bold hover:underline">Autentifică-te</a>
-              </p>
-              <div class="hidden md:block w-px h-4 bg-gray-200"></div>
-              <a routerLink="/" class="text-navy/50 font-bold hover:text-navy text-sm transition-colors">
-                ← Înapoi la început
-              </a>
-            </div>
-          </div>
+            [class.border-red-400]="registerGroup('name').invalid && registerGroup('name').touched" />
+          @if (registerGroup('name').touched) {
+            @if (registerGroup('name').errors?.['required']) {
+              <p class="text-red-500 text-[10px] px-1">Numele este obligatoriu.</p>
+            }
+            @if (registerGroup('name').errors?.['minlength']) {
+              <p class="text-red-500 text-[10px] px-1">Numele trebuie să aibă minim 3 caractere.</p>
+            }
+          }
         </div>
+
+        <!-- Email -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Email</label>
+          <input formControlName="email" type="email" placeholder="nume@exemplu.ro"
+            class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
+            [class.border-red-400]="registerGroup('email').invalid && registerGroup('email').touched" />
+          @if (registerGroup('email').touched) {
+            @if (registerGroup('email').errors?.['required']) {
+              <p class="text-red-500 text-[10px] px-1">Email-ul este obligatoriu.</p>
+            }
+            @if (registerGroup('email').errors?.['email']) {
+              <p class="text-red-500 text-[10px] px-1">Introduceți un email valid.</p>
+            }
+          }
+        </div>
+
+        <!-- Parolă -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Parolă</label>
+          <input formControlName="password" type="password" placeholder="••••••••"
+            class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
+            [class.border-red-400]="registerGroup('password').invalid && registerGroup('password').touched" />
+          @if (registerGroup('password').touched) {
+            @if (registerGroup('password').errors?.['required']) {
+              <p class="text-red-500 text-[10px] px-1">Parola este obligatorie.</p>
+            }
+            @if (registerGroup('password').errors?.['minlength']) {
+              <p class="text-red-500 text-[10px] px-1">Parola trebuie să aibă minim 6 caractere.</p>
+            }
+            @if (registerGroup('password').errors?.['requiresUpperCase']) {
+              <p class="text-red-500 text-[10px] px-1">Parola trebuie să conțină cel puțin o literă mare.</p>
+            }
+            @if (registerGroup('password').errors?.['requiresLowerCase']) {
+              <p class="text-red-500 text-[10px] px-1">Parola trebuie să conțină cel puțin o literă mică.</p>
+            }
+            @if (registerGroup('password').errors?.['requiresDigit']) {
+              <p class="text-red-500 text-[10px] px-1">Parola trebuie să conțină cel puțin o cifră.</p>
+            }
+            @if (registerGroup('password').errors?.['requiresSpecial']) {
+              <p class="text-red-500 text-[10px] px-1">Parola trebuie să conțină cel puțin un caracter special.</p>
+            }
+          }
+        </div>
+
+        <!-- Confirmare Parolă -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Confirmare Parolă</label>
+          <input formControlName="confirmPassword" type="password" placeholder="••••••••"
+            class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
+            [class.border-red-400]="registerForm.hasError('mismatch') && registerGroup('confirmPassword').touched" />
+          @if (registerGroup('confirmPassword').touched) {
+            @if (registerGroup('confirmPassword').errors?.['required']) {
+              <p class="text-red-500 text-[10px] px-1">Confirmarea parolei este obligatorie.</p>
+            }
+            @if (registerForm.hasError('mismatch')) {
+              <p class="text-red-500 text-[10px] px-1">Parolele nu coincid.</p>
+            }
+          }
+        </div>
+
+      </div>
+
+      <div class="pt-2">
+        <button type="submit" [disabled]="registerForm.invalid"
+          class="w-full h-12 bg-linear-to-r from-navy to-orange text-white rounded-xl font-bold text-base md:text-lg hover:brightness-110 disabled:grayscale disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg active:scale-[0.98]">
+          Creează cont
+        </button>
+      </div>
+    </form>
+
+    <div class="mt-8 pt-5 text-center border-t border-gray-100 flex flex-col md:flex-row justify-center items-center gap-3 md:gap-6">
+      <p class="text-navy/70 text-sm">
+        Ai deja un cont?
+        <a routerLink="/login" class="text-orange font-bold hover:underline">Autentifică-te</a>
+      </p>
+      <div class="hidden md:block w-px h-4 bg-gray-200"></div>
+      <a routerLink="/" class="text-navy/50 font-bold hover:text-navy text-sm transition-colors">
+        ← Înapoi la început
+      </a>
+    </div>
+  </div>
+</div>

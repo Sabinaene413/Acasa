@@ -9,6 +9,9 @@ import { PropertyService } from '../../services/property.service';
 import { CityService } from '../../services/city.service';
 import { CommonModule } from '@angular/common';
 import { Slider } from 'primeng/slider';
+import { SavedSearchService } from '../../services/saved-search.service';
+import { AuthService } from '../../services/auth.service';
+import { SavedSearch } from '../../models/saved-search.model';
 
 @Component({
   selector: 'app-landing-page',
@@ -18,8 +21,16 @@ import { Slider } from 'primeng/slider';
   styleUrl: './landing-page.component.scss',
 })
 export class LandingPageComponent implements OnInit {
+  private savedSearchService = inject(SavedSearchService);
+  protected authService = inject(AuthService);
+
   private propertyService = inject(PropertyService);
   private cityService = inject(CityService);
+
+  savedSearches = signal<SavedSearch[]>([]);
+  isSavingSearch = signal(false);
+  showSaveModal = signal(false);
+  searchName = '';
 
   filter: PropertyFilter = {
     minPrice: 0,
@@ -56,6 +67,10 @@ export class LandingPageComponent implements OnInit {
     this.onSearch();
     this.syncInputsFromSlider('price');
     this.syncInputsFromSlider('surface');
+
+    if (this.authService.isAuthenticated()) {
+      this.loadSavedSearches();
+    }
   }
 
   onPriceRangeChange() {
@@ -174,6 +189,86 @@ export class LandingPageComponent implements OnInit {
         console.error('Error fetching properties:', error);
         this.isLoading.set(false);
       },
+    });
+  }
+
+  loadSavedSearches() {
+    this.savedSearchService.getSavedSearches().subscribe({
+      next: (data) => this.savedSearches.set(data),
+      error: (err) => console.error('Error loading saved searches:', err),
+    });
+  }
+
+  openSaveModal() {
+    this.searchName = '';
+    this.showSaveModal.set(true);
+  }
+
+  closeSaveModal() {
+    this.showSaveModal.set(false);
+  }
+
+  onSaveSearch() {
+    if (!this.searchName.trim()) return;
+    this.isSavingSearch.set(true);
+
+    this.savedSearchService
+      .saveSearch({
+        name: this.searchName,
+        minPrice: this.filter.minPrice,
+        maxPrice:
+          this.filter.maxPrice === 999999999 ? undefined : this.filter.maxPrice,
+        minSurfaceArea: this.filter.minSurfaceArea,
+        maxSurfaceArea:
+          this.filter.maxSurfaceArea === 999999999
+            ? undefined
+            : this.filter.maxSurfaceArea,
+        bedrooms: this.filter.bedrooms,
+        bathrooms: this.filter.bathrooms,
+        cityId: this.filter.cityId,
+        countyId: this.filter.countyId,
+      })
+      .subscribe({
+        next: (saved) => {
+          this.savedSearches.update((current) => [saved, ...current]);
+          this.isSavingSearch.set(false);
+          this.showSaveModal.set(false);
+        },
+        error: () => this.isSavingSearch.set(false),
+      });
+  }
+
+  applySearch(search: SavedSearch) {
+    this.filter.minPrice = search.minPrice ?? 0;
+    this.filter.maxPrice = search.maxPrice ?? this.maxPriceLimit;
+    this.filter.minSurfaceArea = search.minSurfaceArea ?? 0;
+    this.filter.maxSurfaceArea = search.maxSurfaceArea ?? this.maxSurfaceLimit;
+    this.filter.bedrooms = search.bedrooms;
+    this.filter.bathrooms = search.bathrooms;
+    this.filter.cityId = search.cityId;
+    this.filter.countyId = search.countyId;
+
+    this.rangeValues = [
+      this.filter.minPrice,
+      Math.min(this.filter.maxPrice, this.maxPriceLimit),
+    ];
+    this.surfaceRangeValues = [
+      this.filter.minSurfaceArea,
+      Math.min(this.filter.maxSurfaceArea, this.maxSurfaceLimit),
+    ];
+    this.syncInputsFromSlider('price');
+    this.syncInputsFromSlider('surface');
+    if (search.countyId) this.loadCities(search.countyId);
+
+    this.onSearch();
+  }
+  deleteSearch(id: number) {
+    this.savedSearchService.deleteSearch(id).subscribe({
+      next: () =>
+        this.savedSearches.update((current) =>
+          current.filter((s) => s.id !== id),
+        ),
+      error: (err) => console.error('Error deleting search:', err),
     });
   }
 }

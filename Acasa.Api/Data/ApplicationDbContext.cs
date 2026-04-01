@@ -1,5 +1,4 @@
 ﻿using Acasa.Api.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,5 +13,6 @@ namespace Acasa.Api.Data
         public DbSet<PropertyImage> PropertyImages { get; set; }
         public DbSet<County> Counties { get; set; }
         public DbSet<City> Cities { get; set; }
+        public DbSet<SavedSearch> SavedSearches { get; set; }
     }
 }
