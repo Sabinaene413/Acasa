@@ -127,14 +127,21 @@ namespace Acasa.Api.Services
                 cityName = city?.Name ?? "";
             }
 
-            var (lat, lng) = await _geocodingService.GeocodeAsync(property.Address, cityName);
-            property.Latitude = lat;
-            property.Longitude = lng;
+            if (propertyCreateDto.Latitude.HasValue && propertyCreateDto.Longitude.HasValue)
+            {
+                property.Latitude = propertyCreateDto.Latitude;
+                property.Longitude = propertyCreateDto.Longitude;
+            }
+            else
+            {
+                var (lat, lng) = await _geocodingService.GeocodeAsync(property.Address, cityName);
+                property.Latitude = lat;
+                property.Longitude = lng;
+            }
 
             _context.Properties.Add(property);
             await _context.SaveChangesAsync();
 
-            // Load the city if it was just added to ensure MapToDto gets it
             if (property.CityId.HasValue && property.City == null)
             {
                 await _context.Entry(property).Reference(p => p.City).LoadAsync();
@@ -203,13 +210,20 @@ namespace Acasa.Api.Services
                 cityName = city?.Name ?? "";
             }
 
-            var (lat, lng) = await _geocodingService.GeocodeAsync(property.Address, cityName);
-            property.Latitude = lat;
-            property.Longitude = lng;
+            if (updateDto.Latitude.HasValue && updateDto.Longitude.HasValue)
+            {
+                property.Latitude = updateDto.Latitude;
+                property.Longitude = updateDto.Longitude;
+            }
+            else
+            {
+                var (lat, lng) = await _geocodingService.GeocodeAsync(property.Address, cityName);
+                property.Latitude = lat;
+                property.Longitude = lng;
+            }
 
             await _context.SaveChangesAsync();
             
-            // Reload the city to ensure it matches the new CityId
             if (property.CityId.HasValue)
             {
                 await _context.Entry(property).Reference(p => p.City).LoadAsync();

@@ -27,5 +27,8 @@ namespace Acasa.Api.DTOs
 
         public List<IFormFile>? NewImages { get; set; }
         public List<int>? ImagesToDelete { get; set; }
+
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
     }
 }
