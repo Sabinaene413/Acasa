@@ -15,14 +15,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { PropertyService } from '../../../services/property.service';
-import { CityService } from '../../../services/city.service';
-import { ToastService } from '../../../services/toast.service';
-import { NavbarComponent } from '../../../components/navbar/navbar.component';
-import { City } from '../../../models/city.model';
+import { PropertyService } from '../services/property.service';
+import { CityService } from '../services/city.service';
+import { ToastService } from '../../../core/services/toast.service';
+import { NavbarComponent } from '../../../core/components/navbar/navbar.component';
+import { City } from '../models/city.model';
 import * as L from 'leaflet';
 import { Subject, debounceTime, takeUntil } from 'rxjs';
-import { GeocodingService } from '../../../services/geocoding.service';
+import { GeocodingService } from '../../../core/services/geocoding.service';
 
 @Component({
   selector: 'app-add-property',

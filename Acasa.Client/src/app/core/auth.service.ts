@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { tap, catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
-import { CurrentUser } from '../models/user.model';
+import { CurrentUser } from './models/user.model';
 
 @Injectable({
   providedIn: 'root',

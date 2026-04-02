@@ -9,9 +9,9 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { PropertyService } from '../../../services/property.service';
-import { Property } from '../../../models/property.model';
-import { NavbarComponent } from '../../../components/navbar/navbar.component';
+import { PropertyService } from '../services/property.service';
+import { Property } from '../models/property.model';
+import { NavbarComponent } from '../../../core/components/navbar/navbar.component';
 import * as L from 'leaflet';
 
 @Component({

@@ -1,14 +1,14 @@
 import { Component, inject, signal, OnInit, OnDestroy, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { PropertyService } from '../../../services/property.service';
-import { CityService } from '../../../services/city.service';
-import { GeocodingService } from '../../../services/geocoding.service';
-import { ToastService } from '../../../services/toast.service';
-import { AuthService } from '../../../services/auth.service';
-import { NavbarComponent } from '../../../components/navbar/navbar.component';
-import { City } from '../../../models/city.model';
-import { PropertyImage } from '../../../models/property.model';
+import { PropertyService } from '../services/property.service';
+import { CityService } from '../services/city.service';
+import { GeocodingService } from '../../../core/services/geocoding.service';
+import { ToastService } from '../../../core/services/toast.service';
+import { AuthService } from '../../../core/auth.service';
+import { NavbarComponent } from '../../../core/components/navbar/navbar.component';
+import { City } from '../models/city.model';
+import { PropertyImage } from '../models/property.model';
 import { map, Subject, switchMap, takeUntil } from 'rxjs';
 import * as L from 'leaflet';
 

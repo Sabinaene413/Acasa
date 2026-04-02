@@ -8,10 +8,10 @@ import {
   AfterViewInit,
 } from '@angular/core';
 
-import { PropertyService } from '../../../services/property.service';
-import { Property } from '../../../models/property.model';
+import { PropertyService } from '../services/property.service';
+import { Property } from '../models/property.model';
 import * as L from 'leaflet';
-import { NavbarComponent } from '../../../components/navbar/navbar.component';
+import { NavbarComponent } from '../../../core/components/navbar/navbar.component';
 import { Router } from '@angular/router';
 import 'leaflet.markercluster';
 

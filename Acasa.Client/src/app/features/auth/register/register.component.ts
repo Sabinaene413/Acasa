@@ -9,8 +9,8 @@ import {
   FormGroup,
   AbstractControl,
 } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
-import { ToastService } from '../../services/toast.service';
+import { AuthService } from '../../../core/auth.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-register',

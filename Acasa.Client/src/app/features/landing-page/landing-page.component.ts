@@ -1,17 +1,17 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { NavbarComponent } from '../../core/components/navbar/navbar.component';
 import { FormsModule } from '@angular/forms';
-import { Property, PropertyFilter } from '../../models/property.model';
-import { City } from '../../models/city.model';
-import { County } from '../../models/county.model';
-import { PropertyService } from '../../services/property.service';
-import { CityService } from '../../services/city.service';
+import { Property, PropertyFilter } from '../properties/models/property.model';
+import { City } from '../properties/models/city.model';
+import { County } from '../properties/models/county.model';
+import { PropertyService } from '../properties/services/property.service';
+import { CityService } from '../properties/services/city.service';
 import { CommonModule } from '@angular/common';
 import { Slider } from 'primeng/slider';
-import { SavedSearchService } from '../../services/saved-search.service';
-import { AuthService } from '../../services/auth.service';
-import { SavedSearch } from '../../models/saved-search.model';
+import { SavedSearchService } from '../properties/services/saved-search.service';
+import { AuthService } from '../../core/auth.service';
+import { SavedSearch } from '../properties/models/saved-search.model';
 
 @Component({
   selector: 'app-landing-page',
