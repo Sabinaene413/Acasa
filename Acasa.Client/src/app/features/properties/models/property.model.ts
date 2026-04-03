@@ -32,3 +32,14 @@ export interface PropertyFilter {
   bedrooms?: number;
   bathrooms?: number;
 }
+
+export const DEFAULT_FILTER: PropertyFilter = {
+  minPrice: 0,
+  maxPrice: 1000000,
+  minSurfaceArea: 0,
+  maxSurfaceArea: 500,
+  bedrooms: undefined,
+  bathrooms: undefined,
+  cityId: undefined,
+  countyId: undefined,
+};

@@ -1,10 +1,10 @@
 <div class="min-h-screen flex flex-col bg-light-gray text-navy font-sans pt-20">
-  <app-navbar></app-navbar>
+  <app-navbar />
 
-  <!-- Hero Section -->
   <main class="flex-grow flex flex-col items-center px-4 py-8 md:py-16">
     <div class="max-w-4xl w-full text-center space-y-10">
 
+      <!-- Hero text — rămâne în landing page -->
       <div class="space-y-4">
         <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight leading-tight">
           Găsește-ți locul <span class="text-orange">perfect</span>
@@ -14,273 +14,32 @@
         </p>
       </div>
 
-      <!-- Search Bar -->
-      <div class="w-full max-w-6xl mx-auto">
-        <form (ngSubmit)="onSearch()"
-          class="bg-white p-6 md:p-8 rounded-3xl shadow-2xl border-b-8 border-peach/40 space-y-8">
+      <!-- Componente -->
+      <app-property-search-form
+        (search)="onSearch($event)"
+        (saveSearch)="showSaveModal.set(true)">
+      </app-property-search-form>
 
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <app-saved-searches-bar
+        (applySearch)="onSearch($event)">
+      </app-saved-searches-bar>
 
-            <!-- Location Group -->
-            <div class="space-y-4">
-              <div class="relative">
-                <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1">Județ</label>
-                <select [(ngModel)]="filter.countyId" name="countyId" (change)="onCountyChange()"
-                  class="w-full h-12 bg-gray-50 rounded-2xl px-4 text-navy border-2 border-transparent focus:border-orange/20 focus:bg-white transition-all appearance-none cursor-pointer">
-                  <option [ngValue]="undefined">Toate județele</option>
-                  @for (county of counties; track county) {
-                    <option [ngValue]="county.id">{{ county.name }}</option>
-                  }
-                </select>
-                <div class="absolute right-4 bottom-3 pointer-events-none text-orange">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                  </svg>
-                </div>
-              </div>
-              <div class="relative">
-                <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1">Oraș</label>
-                <select [(ngModel)]="filter.cityId" name="cityId"
-                  class="w-full h-12 bg-gray-50 rounded-2xl px-4 text-navy border-2 border-transparent focus:border-orange/20 focus:bg-white transition-all appearance-none cursor-pointer">
-                  <option [ngValue]="undefined">Toate orașele</option>
-                  @for (city of cities; track city) {
-                    <option [ngValue]="city.id">{{ city.name }}</option>
-                  }
-                </select>
-                <div class="absolute right-4 bottom-3 pointer-events-none text-orange">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                  </svg>
-                </div>
-              </div>
-            </div>
-
-            <!-- Features Group -->
-            <div class="space-y-4">
-              <div class="relative">
-                <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1">Dormitoare</label>
-                <div class="flex items-center bg-gray-50 rounded-2xl border-2 border-transparent focus-within:border-orange/20 focus-within:bg-white transition-all">
-                  <span class="pl-4 text-orange">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                    </svg>
-                  </span>
-                  <input type="number" [(ngModel)]="filter.bedrooms" name="bedrooms" placeholder="Orice"
-                    class="w-full h-12 bg-transparent px-3 text-navy border-none focus:ring-0" />
-                </div>
-              </div>
-              <div class="relative">
-                <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1">Băi</label>
-                <div class="flex items-center bg-gray-50 rounded-2xl border-2 border-transparent focus-within:border-orange/20 focus-within:bg-white transition-all">
-                  <span class="pl-4 text-orange">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
-                    </svg>
-                  </span>
-                  <input type="number" [(ngModel)]="filter.bathrooms" name="bathrooms" placeholder="Orice"
-                    class="w-full h-12 bg-transparent px-3 text-navy border-none focus:ring-0" />
-                </div>
-              </div>
-            </div>
-
-            <!-- Price + Surface Range -->
-            <div class="space-y-4">
-
-              <!-- Price Range -->
-              <div class="flex flex-col justify-start pt-1">
-                <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1">Preț</label>
-                <div class="flex items-center gap-2 mb-3">
-                  <input type="text" [(ngModel)]="inputs.price.lo"
-                    (focus)="$any($event.target).select()"
-                    (blur)="onInputChange('price', 'lo')"
-                    (keydown.enter)="onInputChange('price', 'lo')"
-                    name="priceLo"
-                    class="w-full h-12 bg-gray-50 rounded-2xl px-3 text-sm text-center text-navy border-2 border-transparent focus:border-orange/20 focus:bg-white transition-all" />
-                  <span class="text-gray-400 text-sm shrink-0">—</span>
-                  <input type="text" [(ngModel)]="inputs.price.hi"
-                    (focus)="$any($event.target).select()"
-                    (blur)="onInputChange('price', 'hi')"
-                    (keydown.enter)="onInputChange('price', 'hi')"
-                    name="priceHi"
-                    class="w-full h-12 bg-gray-50 rounded-2xl px-3 text-sm text-center text-navy border-2 border-transparent focus:border-orange/20 focus:bg-white transition-all" />
-                </div>
-                <p-slider [(ngModel)]="rangeValues" [range]="true"
-                  [min]="minPriceLimit" [max]="maxPriceLimit" [step]="1000"
-                  (onChange)="onPriceRangeChange()" name="priceSlider" class="w-full">
-                </p-slider>
-              </div>
-
-              <!-- Surface Range -->
-              <div class="flex flex-col justify-start pt-1">
-                <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1">Suprafață</label>
-                <div class="flex items-center gap-2 mb-3">
-                  <input type="text" [(ngModel)]="inputs.surface.lo"
-                    (focus)="$any($event.target).select()"
-                    (blur)="onInputChange('surface', 'lo')"
-                    (keydown.enter)="onInputChange('surface', 'lo')"
-                    name="surfaceLo"
-                    class="w-full h-12 bg-gray-50 rounded-2xl px-3 text-sm text-center text-navy border-2 border-transparent focus:border-orange/20 focus:bg-white transition-all" />
-                  <span class="text-gray-400 text-sm shrink-0">—</span>
-                  <input type="text" [(ngModel)]="inputs.surface.hi"
-                    (focus)="$any($event.target).select()"
-                    (blur)="onInputChange('surface', 'hi')"
-                    (keydown.enter)="onInputChange('surface', 'hi')"
-                    name="surfaceHi"
-                    class="w-full h-12 bg-gray-50 rounded-2xl px-3 text-sm text-center text-navy border-2 border-transparent focus:border-orange/20 focus:bg-white transition-all" />
-                </div>
-                <p-slider [(ngModel)]="surfaceRangeValues" [range]="true"
-                  [min]="minSurfaceLimit" [max]="maxSurfaceLimit" [step]="1"
-                  (onChange)="onSurfaceRangeChange()" name="surfaceSlider" class="w-full">
-                </p-slider>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- Submit + Salvare -->
-          <div class="flex flex-col items-center gap-4 pt-4 border-t border-gray-100">
-            <div class="flex items-center gap-3">
-              <button type="submit"
-                class="group relative px-12 py-4 bg-orange rounded-2xl text-white font-bold text-lg shadow-xl shadow-orange/20 hover:bg-orange/90 hover:-translate-y-1 transition-all duration-300">
-                <span class="flex items-center gap-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 group-hover:scale-110 transition-transform"
-                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                  Căutare Proprietăți
-                </span>
-              </button>
-
-              @if (authService.isAuthenticated()) {
-                <button type="button" (click)="openSaveModal()"
-                  class="px-6 py-4 bg-white border-2 border-orange/30 rounded-2xl text-orange font-bold text-lg hover:bg-orange/5 hover:-translate-y-1 transition-all duration-300">
-                  <span class="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-                    </svg>
-                    Salvează căutarea
-                  </span>
-                </button>
-              }
-            </div>
-
-            <!-- Lista căutări salvate -->
-            @if (authService.isAuthenticated() && savedSearches().length > 0) {
-              <div class="w-full">
-                <p class="text-xs font-bold text-navy/40 uppercase mb-2">Căutări salvate</p>
-                <div class="flex flex-wrap gap-2">
-                  @for (search of savedSearches(); track search.id) {
-                    <div class="flex items-center gap-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-1.5">
-                      <button type="button" (click)="applySearch(search)"
-                        class="text-sm font-medium text-navy hover:text-orange transition-colors">
-                        {{ search.name }}
-                      </button>
-                      <button type="button" (click)="deleteSearch(search.id)"
-                        class="text-gray-300 hover:text-red-400 transition-colors ml-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                      </button>
-                    </div>
-                  }
-                </div>
-              </div>
-            }
-          </div>
-
-        </form>
-      </div>
-
-      <!-- Results Section -->
-      <div class="mt-12">
-        @if (isLoading()) {
-          <div class="flex flex-col items-center justify-center py-20 space-y-4">
-            <div class="w-12 h-12 border-4 border-orange border-t-transparent rounded-full animate-spin"></div>
-            <p class="text-navy/60 font-medium">Căutăm cele mai bune oferte pentru tine...</p>
-          </div>
-        }
-
-        @if (!isLoading() && properties.length === 0) {
-          <div class="flex flex-col items-center justify-center py-20 space-y-4 bg-white/50 rounded-3xl border-2 border-dashed border-navy/10">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-navy/20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-            </svg>
-            <div class="text-center">
-              <h3 class="text-xl font-bold text-navy">Niciun rezultat găsit</h3>
-              <p class="text-navy/60">Încearcă să modifici filtrele pentru mai multe opțiuni.</p>
-            </div>
-          </div>
-        }
-
-        @if (!isLoading() && properties.length > 0) {
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            @for (property of properties; track property) {
-              <div [routerLink]="['/property', property.id]"
-                class="bg-white rounded-2xl shadow-lg overflow-hidden border border-peach/20 hover:shadow-2xl transition-all cursor-pointer group">
-                <div class="h-48 bg-gray-200 relative overflow-hidden">
-                  <img [src]="property.images && property.images.length > 0 ? property.images[0].url : 'assets/placeholder-property.jpg'"
-                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div class="absolute top-4 right-4 bg-orange text-white px-3 py-1 rounded-full font-bold shadow-lg">
-                    {{ property.price | currency: "EUR" : "symbol" : "1.0-0" }}
-                  </div>
-                </div>
-                <div class="p-6 space-y-4 text-left">
-                  <h3 class="text-xl font-bold text-navy truncate group-hover:text-orange transition-colors">
-                    {{ property.title }}
-                  </h3>
-                  <p class="text-navy/60 text-sm line-clamp-2">{{ property.description }}</p>
-                  <div class="flex items-center gap-4 text-navy/80 font-medium">
-                    <div class="flex items-center gap-1">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                      </svg>
-                      {{ property.bedrooms }} Camere
-                    </div>
-                    <div class="flex items-center gap-1">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
-                      </svg>
-                      {{ property.surfaceArea }} m²
-                    </div>
-                  </div>
-                </div>
-              </div>
-            }
-          </div>
-        }
-      </div>
+      <app-property-results-grid
+        [properties]="properties()"
+        [isLoading]="isLoading()">
+      </app-property-results-grid>
 
     </div>
   </main>
 
-  <!-- Bottom Accent -->
   <div class="h-2 bg-peach w-full"></div>
 
-  <!-- Modal salvare -->
-  @if (showSaveModal()) {
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-      <div class="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-sm mx-4">
-        <h3 class="text-xl font-bold text-navy mb-4">Salvează căutarea</h3>
-        <input type="text" [(ngModel)]="searchName" name="searchName"
-          placeholder="Ex: Apartament București 2 camere"
-          class="w-full h-12 bg-gray-50 rounded-2xl px-4 text-navy border-2 border-transparent focus:border-orange/20 focus:bg-white transition-all mb-4" />
-        <div class="flex gap-3">
-          <button type="button" (click)="closeSaveModal()"
-            class="flex-1 py-3 rounded-2xl border-2 border-gray-200 text-navy font-bold hover:bg-gray-50 transition-all">
-            Anulează
-          </button>
-          <button type="button" (click)="onSaveSearch()" [disabled]="isSavingSearch()"
-            class="flex-1 py-3 rounded-2xl bg-orange text-white font-bold hover:bg-orange/90 transition-all disabled:opacity-50">
-            {{ isSavingSearch() ? 'Se salvează...' : 'Salvează' }}
-          </button>
-        </div>
-      </div>
-    </div>
-  }
-
 </div>
+
+@if (showSaveModal()) {
+  <app-save-search-modal
+    [filter]="currentFilter()"
+    (saved)="onSearchSaved($event)"
+    (close)="showSaveModal.set(false)">
+  </app-save-search-modal>
+}
