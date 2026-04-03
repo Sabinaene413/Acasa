@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { tap, catchError } from 'rxjs/operators';
+import { tap, catchError, switchMap } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
 import { CurrentUser } from './models/user.model';
 
@@ -10,10 +10,11 @@ import { CurrentUser } from './models/user.model';
 export class AuthService {
   private apiUrl = 'https://localhost:7102'; // Verifică portul tău din appsettings.json
 
-  // Use Angular Signals for reactive auth state (modern Angular 17/18+)
   isAuthenticated = signal<boolean>(this.hasToken());
+  currentUser = signal<CurrentUser | null>(null);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   private hasToken(): boolean {
     const token = localStorage.getItem('auth_token');
@@ -36,6 +37,7 @@ export class AuthService {
           localStorage.setItem('refresh_token', response.refreshToken); // salveaza si asta!
           this.isAuthenticated.set(true);
         }),
+        switchMap(() => this.getCurrentUser()),
         catchError(this.handleError),
       );
   }
@@ -78,7 +80,9 @@ export class AuthService {
     return localStorage.getItem('auth_token');
   }
 
-  getCurrentUser(): Observable<{ userId: string }> {
-    return this.http.get<{ userId: string }>(`${this.apiUrl}/api/account/me`);
+  getCurrentUser(): Observable<CurrentUser> {
+    return this.http
+      .get<CurrentUser>(`${this.apiUrl}/api/account/me`)
+      .pipe(tap((user) => this.currentUser.set(user)));
   }
 }

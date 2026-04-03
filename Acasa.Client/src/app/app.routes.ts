@@ -5,7 +5,7 @@ import { RegisterComponent } from './features/auth/register/register.component';
 import { AddPropertyComponent } from './features/properties/add-property/add-property.component';
 import { EditPropertyComponent } from './features/properties/edit-property/edit-property.component';
 import { authGuard } from './core/guards/auth.guard';
-import { ProfileComponent } from './features/auth/profile/profile';
+import { ProfileComponent } from './features/auth/profile/profile.component';
 import { PropertyDetailsComponent } from './features/properties/property-details/property-details.component';
 import { PropertiesMapComponent } from './features/properties/properties-map/properties-map.component';
 

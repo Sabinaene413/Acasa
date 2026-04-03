@@ -1,0 +1,69 @@
+<div class="flex justify-between items-center mb-6">
+  <h2 class="text-2xl font-bold text-gray-900">Anunțurile mele</h2>
+  <button (click)="onAdd()"
+    class="text-primary-600 font-semibold hover:text-primary-700 flex items-center gap-2">
+    <i class="pi pi-plus-circle"></i>
+    Adaugă anunț nou
+  </button>
+</div>
+
+@if (isLoading()) {
+  <div class="flex justify-center py-12">
+    <div class="w-10 h-10 border-4 border-orange border-t-transparent rounded-full animate-spin"></div>
+  </div>
+}
+
+@if (!isLoading() && properties().length === 0) {
+  <div class="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-12 text-center">
+    <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+      <i class="pi pi-home text-gray-400 text-2xl"></i>
+    </div>
+    <h3 class="text-lg font-bold text-gray-900 mb-2">Nu ai niciun anunț adăugat</h3>
+    <p class="text-gray-500 mb-6 max-w-xs mx-auto">
+      Vrei să vinzi sau să închiriezi o proprietate? Adaugă primul tău anunț.
+    </p>
+    <button (click)="onAdd()"
+      class="px-8 py-3 bg-primary-600 text-white rounded-xl font-bold hover:bg-primary-700 transition-all">
+      Adaugă proprietate
+    </button>
+  </div>
+}
+
+@if (!isLoading() && properties().length > 0) {
+  <div class="space-y-4">
+    @for (property of properties(); track property.id) {
+      <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden hover:shadow-md transition-all group">
+        <div class="flex flex-col md:flex-row">
+
+          <div class="relative w-full md:w-48 h-48 flex-shrink-0">
+            <img
+              [src]="(property.images && property.images.length > 0) ? property.images[0].url : 'assets/placeholder-property.jpg'"
+              [alt]="property.title"
+              class="w-full h-full object-cover" />
+            <div class="absolute top-2 left-2 px-3 py-1 bg-white/90 rounded-lg text-xs font-bold text-gray-900 shadow-sm">
+              {{ property.price | currency:'EUR':'symbol':'1.0-0' }}
+            </div>
+          </div>
+
+          <div class="p-6 flex-grow">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="font-bold text-lg text-gray-900 group-hover:text-primary-600 transition-colors">
+                {{ property.title }}
+              </h3>
+              <button (click)="onEdit(property.id!)"
+                class="p-2 text-gray-400 hover:text-blue-600 transition-colors">
+                <i class="pi pi-pencil"></i>
+              </button>
+            </div>
+
+            <p class="text-gray-500 text-sm flex items-center gap-2">
+              <i class="pi pi-map-marker"></i>
+              {{ property.address }}, {{ property.city?.name }}
+            </p>
+          </div>
+
+        </div>
+      </div>
+    }
+  </div>
+}

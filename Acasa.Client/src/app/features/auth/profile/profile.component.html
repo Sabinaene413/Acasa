@@ -1,0 +1,35 @@
+<app-navbar />
+
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 mt-12">
+  <div class="max-w-7xl mx-auto">
+
+    <!-- Header -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
+      <div class="flex flex-col md:flex-row items-center gap-8">
+
+        <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center">
+          <i class="pi pi-user text-4xl text-gray-400"></i>
+        </div>
+
+        <div class="flex-grow text-center md:text-left">
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">Profilul meu</h1>
+          <p class="text-gray-500 flex items-center justify-center md:justify-start gap-2">
+            <i class="pi pi-envelope"></i>
+            {{ authService.currentUser()?.email ?? 'Necunoscut' }}
+          </p>
+        </div>
+
+        <button (click)="logout()"
+          class="px-6 py-2.5 bg-white text-red-600 border border-red-100 rounded-xl font-semibold hover:bg-red-50 transition-all flex items-center gap-2">
+          <i class="pi pi-power-off"></i>
+          Deconectare
+        </button>
+
+      </div>
+    </div>
+
+    <!-- Proprietățile mele -->
+    <app-my-properties-list />
+
+  </div>
+</div>

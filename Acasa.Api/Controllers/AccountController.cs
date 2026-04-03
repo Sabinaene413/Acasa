@@ -13,8 +13,9 @@ namespace Acasa.Api.Controllers
         public IActionResult GetCurrentUser()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var email = User.FindFirstValue(ClaimTypes.Email);
             if (string.IsNullOrEmpty(userId)) return Unauthorized();
-            return Ok(new { userId });
+            return Ok(new { userId, email });
         }
     }
 }
