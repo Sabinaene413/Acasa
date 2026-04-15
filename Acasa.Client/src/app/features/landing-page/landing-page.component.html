@@ -2,44 +2,51 @@
   <app-navbar />
 
   <main class="flex-grow flex flex-col items-center px-4 py-8 md:py-16">
-    <div class="max-w-4xl w-full text-center space-y-10">
-
+    <div class="w-full flex flex-col items-center text-center space-y-10">
       <!-- Hero text — rămâne în landing page -->
       <div class="space-y-4">
-        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight leading-tight">
+        <h1
+          class="text-5xl md:text-6xl font-extrabold tracking-tight leading-tight"
+        >
           Găsește-ți locul <span class="text-orange">perfect</span>
         </h1>
-        <p class="text-lg md:text-xl text-navy/70 font-medium max-w-2xl mx-auto">
+        <p
+          class="text-lg md:text-xl text-navy/70 font-medium max-w-2xl mx-auto"
+        >
           Cele mai bune oferte imobiliare, într-un singur loc.
         </p>
       </div>
 
       <!-- Componente -->
-      <app-property-search-form
-        (search)="onSearch($event)"
-        (saveSearch)="showSaveModal.set(true)">
-      </app-property-search-form>
+      <div class="max-w-4xl w-full">
+        <app-property-search-form
+          (search)="onSearch($event)"
+          (saveSearch)="showSaveModal.set(true)"
+        >
+        </app-property-search-form>
+      </div>
 
-      <app-saved-searches-bar
-        (applySearch)="onSearch($event)">
+      <app-saved-searches-bar (applySearch)="onSearch($event)">
       </app-saved-searches-bar>
 
-      <app-property-results-grid
-        [properties]="properties()"
-        [isLoading]="isLoading()">
-      </app-property-results-grid>
-
+      <div class="max-w-7xl w-full">
+        <app-property-results-grid
+          [properties]="properties()"
+          [isLoading]="isLoading()"
+        >
+        </app-property-results-grid>
+      </div>
     </div>
   </main>
 
   <div class="h-2 bg-peach w-full"></div>
-
 </div>
 
 @if (showSaveModal()) {
   <app-save-search-modal
     [filter]="currentFilter()"
     (saved)="onSearchSaved($event)"
-    (close)="showSaveModal.set(false)">
+    (close)="showSaveModal.set(false)"
+  >
   </app-save-search-modal>
 }
