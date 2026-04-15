@@ -32,6 +32,7 @@
       <p-select
         [options]="counties()"
         [(ngModel)]="selectedCountyId"
+        [ngModelOptions]="{standalone: true}"
         optionLabel="name"
         optionValue="id"
         placeholder="Selectează un județ"
@@ -46,12 +47,14 @@
       <div class="grid grid-cols-2 gap-3">
         <p-inputNumber
           [(ngModel)]="minPrice"
+          [ngModelOptions]="{standalone: true}"
           placeholder="Min"
           styleClass="w-full"
           inputStyleClass="w-full bg-gray-50 border-none rounded-xl py-3 px-4 focus:ring-2 focus:ring-orange/20 text-navy font-semibold"
         ></p-inputNumber>
         <p-inputNumber
           [(ngModel)]="maxPrice"
+          [ngModelOptions]="{standalone: true}"
           placeholder="Max"
           styleClass="w-full"
           inputStyleClass="w-full bg-gray-50 border-none rounded-xl py-3 px-4 focus:ring-2 focus:ring-orange/20 text-navy font-semibold"

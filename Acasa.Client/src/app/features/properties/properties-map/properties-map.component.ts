@@ -8,6 +8,7 @@ import { CityService } from '../services/city.service';
 import { County } from '../models/county.model';
 import { PropertyMapComponent } from './components/property-map/property-map.component';
 import { MapFilterSidebarComponent } from './components/map-filter-sidebar/map-filter-sidebar.component';
+import { PropertyDetailsSidebarComponent } from './components/property-details-sidebar/property-details-sidebar.component';
 
 @Component({
   selector: 'app-properties-map',
@@ -17,6 +18,7 @@ import { MapFilterSidebarComponent } from './components/map-filter-sidebar/map-f
     NavbarComponent,
     PropertyMapComponent,
     MapFilterSidebarComponent,
+    PropertyDetailsSidebarComponent,
   ],
   templateUrl: 'properties-map.component.html',
   styleUrl: 'properties-map.component.scss',
@@ -27,10 +29,15 @@ export class PropertiesMapComponent implements OnInit {
 
   @ViewChild(PropertyMapComponent) mapComponent!: PropertyMapComponent;
 
+  // Global State
   properties = signal<Property[]>([]);
   isLoading = signal(true);
   isSidebarOpen = signal(false);
   counties = signal<County[]>([]);
+
+  // Selection State
+  selectedProperty = signal<Property | null>(null);
+  isDetailsSidebarOpen = signal(false);
 
   ngOnInit() {
     this.loadInitialData();
@@ -73,5 +80,22 @@ export class PropertiesMapComponent implements OnInit {
         this.isLoading.set(false);
       },
     });
+  }
+
+  onPropertySelected(id: number) {
+    const property = this.properties().find(p => p.id === id);
+    if (property) {
+      this.selectedProperty.set(property);
+      this.isDetailsSidebarOpen.set(true);
+      // Dacă sidebar-ul de filtre e deschis, îl închidem pentru a nu aglomera UI-ul
+      if (this.isSidebarOpen()) this.isSidebarOpen.set(false);
+      this.mapComponent.resizeMap();
+    }
+  }
+
+  onDetailsClosed() {
+    this.selectedProperty.set(null);
+    this.isDetailsSidebarOpen.set(false);
+    this.mapComponent.resizeMap();
   }
 }

@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, input, effect, inject, signal } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, input, effect, inject, signal, output } from '@angular/core';
 import { Property } from '../../../models/property.model';
 import { Router } from '@angular/router';
 import * as L from 'leaflet';
@@ -45,17 +45,13 @@ export class PropertyMapComponent implements AfterViewInit {
   @ViewChild('mapContainer') mapContainer!: ElementRef;
   
   properties = input<Property[]>([]);
+  propertySelected = output<number>(); // Emitem ID-ul proprietății
 
   constructor() {
-    // Acest effect va rula ori de câte ori 'properties' SAU 'mapInstance' se schimbă
     effect(() => {
       const props = this.properties();
       const map = this.mapInstance();
-      
-      if (map) {
-        console.log(`Updating map with ${props.length} properties`);
-        this.updateMarkers(map, props);
-      }
+      if (map) this.updateMarkers(map, props);
     });
   }
 
@@ -66,9 +62,7 @@ export class PropertyMapComponent implements AfterViewInit {
   public resizeMap() {
     setTimeout(() => {
       const map = this.mapInstance();
-      if (map) {
-        map.invalidateSize({ animate: true });
-      }
+      if (map) map.invalidateSize({ animate: true });
     }, 300);
   }
 
@@ -80,74 +74,50 @@ export class PropertyMapComponent implements AfterViewInit {
 
     L.control.zoom({ position: 'topright' }).addTo(map);
     map.addLayer(this.markersCluster);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-
+    // Event Delegation pentru butonul de detalii
     this.mapContainer.nativeElement.addEventListener('click', (event: MouseEvent) => {
       const target = event.target as HTMLElement;
-      if (target.tagName === 'A' && target.getAttribute('data-property-id')) {
-        event.preventDefault();
-        const id = target.getAttribute('data-property-id');
-        this.router.navigate(['/property', id]);
+      if (target.classList.contains('view-details-btn')) {
+        const id = target.getAttribute('data-id');
+        if (id) this.propertySelected.emit(Number(id));
       }
     });
 
-    // Setăm instanța hărții în semnal pentru a declanșa effect-ul
     this.mapInstance.set(map);
   }
 
   private updateMarkers(map: L.Map, properties: Property[]) {
-    // Curățăm markerii existenți
     this.markersCluster.clearLayers();
-
     if (!properties || properties.length === 0) return;
 
-    const newMarkers: L.Marker[] = [];
-
-    properties.forEach((property) => {
-      if (property.latitude && property.longitude) {
-        const marker = L.marker([property.latitude, property.longitude], {
-          icon: L.divIcon({
-            className: '',
-            html: `<div class="price-marker">${new Intl.NumberFormat('de-DE').format(property.price)} €</div>`,
-            iconSize: [80, 30], // Dimensiune aproximativă pentru a evita erorile de randare
-            iconAnchor: [40, 15],
-          })
-        }).bindPopup(this.createPopupHtml(property), {
-          offset: L.point(0, -15),
-        });
-
-        newMarkers.push(marker);
-      }
+    const newMarkers = properties.map(p => {
+      return L.marker([p.latitude!, p.longitude!], {
+        icon: L.divIcon({
+          className: '',
+          html: `<div class="price-marker">${new Intl.NumberFormat('de-DE').format(p.price)} €</div>`,
+          iconSize: [80, 30], iconAnchor: [40, 15],
+        })
+      }).bindPopup(this.createPopupHtml(p), { offset: L.point(0, -15) });
     });
 
-    if (newMarkers.length > 0) {
-      this.markersCluster.addLayers(newMarkers);
-      
-      try {
-        const bounds = this.markersCluster.getBounds();
-        if (bounds.isValid()) {
-          map.fitBounds(bounds.pad(0.1), { animate: true });
-        }
-      } catch (e) {
-        console.warn('Could not fit bounds', e);
-      }
-    }
+    this.markersCluster.addLayers(newMarkers);
+    const bounds = this.markersCluster.getBounds();
+    if (bounds.isValid()) map.fitBounds(bounds.pad(0.1));
   }
 
-  private createPopupHtml(property: Property): string {
-    const imageUrl = property.images?.[0]?.url || 'assets/placeholder-property.jpg';
+  private createPopupHtml(p: Property): string {
+    const imageUrl = p.images?.[0]?.url || 'assets/placeholder-property.jpg';
     return `
-      <div class="w-48 p-0 overflow-hidden rounded-lg">
+      <div class="w-56 p-0 overflow-hidden rounded-xl bg-white">
         <img src="${imageUrl}" class="w-full h-32 object-cover">
-        <div class="p-2">
-          <h3 class="font-bold text-sm text-navy truncate">${property.title}</h3>
-          <p class="text-orange font-bold text-sm">${property.price} €</p>
-          <a href="javascript:void(0)" data-property-id="${property.id}" class="mt-2 block w-full text-center py-1 bg-navy text-white text-xs rounded hover:bg-orange transition-colors">
-            Detalii
-          </a>
+        <div class="p-3">
+          <h3 class="font-bold text-navy truncate">${p.title}</h3>
+          <p class="text-orange font-black">${new Intl.NumberFormat('de-DE').format(p.price)} €</p>
+          <button class="view-details-btn mt-3 w-full py-2 bg-navy text-white text-xs font-bold rounded-lg hover:bg-orange transition-all cursor-pointer" data-id="${p.id}">
+            Vezi Detalii
+          </button>
         </div>
       </div>
     `;
