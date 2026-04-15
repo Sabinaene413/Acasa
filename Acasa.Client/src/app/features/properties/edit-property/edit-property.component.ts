@@ -11,11 +11,12 @@ import { City } from '../models/city.model';
 import { PropertyImage } from '../models/property.model';
 import { map, Subject, switchMap, takeUntil } from 'rxjs';
 import * as L from 'leaflet';
+import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-edit-property',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, NavbarComponent],
+  imports: [ReactiveFormsModule, RouterLink, NavbarComponent, SelectModule],
   templateUrl: './edit-property.component.html',
 })
 export class EditPropertyComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -72,12 +73,13 @@ export class EditPropertyComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    // harta se inițializează după ce isLoading devine false
-    // o inițializăm când e gata proprietatea
   }
 
   private initMap(existingLat?: number | null, existingLng?: number | null) {
     if (!this.mapContainer) return;
+    if (this.map) {
+    this.map.remove();
+  }
 
     const iconRetinaUrl = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png';
     const iconUrl = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png';
@@ -101,7 +103,12 @@ export class EditPropertyComponent implements OnInit, AfterViewInit, OnDestroy {
       maxZoom: 18
     }).addTo(this.map);
 
-    // dacă proprietatea are deja coordonate, punem pinul
+    setTimeout(() => {
+    if (this.map) {
+      this.map.invalidateSize();
+    }
+  }, 200);
+
     if (existingLat && existingLng) {
       this.placeMarker(existingLat, existingLng);
       this.locationConfirmed.set(true);
@@ -152,8 +159,7 @@ export class EditPropertyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.existingImages.set(property.images || []);
         this.isLoading.set(false);
 
-        // inițializăm harta după ce datele sunt încărcate
-        setTimeout(() => this.initMap(property.latitude, property.longitude), 0);
+        setTimeout(() => this.initMap(property.latitude, property.longitude), 200);
       },
       error: () => {
         this.toastService.error('Eroare', 'Nu s-a putut încărca proprietatea.');

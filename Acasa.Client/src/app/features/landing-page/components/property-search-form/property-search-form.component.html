@@ -1,54 +1,88 @@
-<form (ngSubmit)="onSubmit()"
-  class="bg-white p-6 md:p-8 rounded-3xl shadow-2xl border-b-8 border-peach/40 space-y-8">
-
+<form
+  (ngSubmit)="onSubmit()"
+  class="bg-white p-6 md:p-8 rounded-3xl shadow-2xl border-b-8 border-peach/40 space-y-8"
+>
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
     <!-- Coloana 1: Locație -->
     <div class="space-y-4">
       <div class="relative">
-        <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1">Județ</label>
-        <select [(ngModel)]="filter.countyId" name="countyId" (change)="onCountyChange()"
-          class="w-full h-12 bg-gray-50 rounded-2xl px-4 text-navy border-2 border-transparent focus:border-orange/20 focus:bg-white transition-all appearance-none cursor-pointer">
-          <option [ngValue]="undefined">Toate județele</option>
-          @for (county of counties(); track county.id) {
-            <option [ngValue]="county.id">{{ county.name }}</option>
-          }
-        </select>
+        <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1"
+          >Județ</label
+        >
+
+        <p-select
+          [(ngModel)]="filter.countyId"
+          [options]="counties()"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Toate județele"
+          [filter]="true"
+          [showClear]="true"
+          (onChange)="onCountyChange()"
+          class="w-full h-12 !bg-gray-50 !rounded-2xl !border-none !ring-0"
+          panelStyleClass="!rounded-2xl !shadow-2xl"
+        >
+        </p-select>
       </div>
 
       <div class="relative">
-        <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1">Oraș</label>
-        <select [(ngModel)]="filter.cityId" name="cityId"
-          class="w-full h-12 bg-gray-50 rounded-2xl px-4 text-navy border-2 border-transparent focus:border-orange/20 focus:bg-white transition-all appearance-none cursor-pointer">
-          <option [ngValue]="undefined">Toate orașele</option>
-          @for (city of cities(); track city.id) {
-            <option [ngValue]="city.id">{{ city.name }}</option>
-          }
-        </select>
+        <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1"
+          >Oraș</label
+        >
+        <p-select
+          [(ngModel)]="filter.cityId"
+          [options]="cities()"
+          optionLabel="name"
+          optionValue="id"
+          placeholder="Toate orasele"
+          [filter]="true"
+          [showClear]="true"
+          class="w-full h-12 !bg-gray-50 !rounded-2xl !border-none !ring-0"
+          panelStyleClass="!rounded-2xl !shadow-2xl"
+        >
+        </p-select>
       </div>
     </div>
 
     <!-- Coloana 2: Dormitoare + Băi -->
     <div class="space-y-4">
       <div>
-        <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1">Dormitoare</label>
-        <div class="flex items-center bg-gray-50 rounded-2xl border-2 border-transparent focus-within:border-orange/20 focus-within:bg-white transition-all">
+        <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1"
+          >Dormitoare</label
+        >
+        <div
+          class="flex items-center bg-gray-50 rounded-2xl border-2 border-transparent focus-within:border-orange/20 focus-within:bg-white transition-all"
+        >
           <span class="pl-4 text-orange">
             <i class="pi pi-home"></i>
           </span>
-          <input type="number" [(ngModel)]="filter.bedrooms" name="bedrooms" placeholder="Orice"
-            class="w-full h-12 bg-transparent px-3 text-navy border-none focus:ring-0" />
+          <input
+            type="number"
+            [(ngModel)]="filter.bedrooms"
+            name="bedrooms"
+            placeholder="Orice"
+            class="w-full h-12 bg-transparent px-3 text-navy border-none focus:ring-0"
+          />
         </div>
       </div>
 
       <div>
-        <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1">Băi</label>
-        <div class="flex items-center bg-gray-50 rounded-2xl border-2 border-transparent focus-within:border-orange/20 focus-within:bg-white transition-all">
+        <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1"
+          >Băi</label
+        >
+        <div
+          class="flex items-center bg-gray-50 rounded-2xl border-2 border-transparent focus-within:border-orange/20 focus-within:bg-white transition-all"
+        >
           <span class="pl-4 text-orange">
             <i class="pi pi-building"></i>
           </span>
-          <input type="number" [(ngModel)]="filter.bathrooms" name="bathrooms" placeholder="Orice"
-            class="w-full h-12 bg-transparent px-3 text-navy border-none focus:ring-0" />
+          <input
+            type="number"
+            [(ngModel)]="filter.bathrooms"
+            name="bathrooms"
+            placeholder="Orice"
+            class="w-full h-12 bg-transparent px-3 text-navy border-none focus:ring-0"
+          />
         </div>
       </div>
     </div>
@@ -56,61 +90,101 @@
     <!-- Coloana 3: Preț + Suprafață -->
     <div class="space-y-4">
       <div class="flex flex-col justify-start pt-1">
-        <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1">Preț</label>
+        <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1"
+          >Preț</label
+        >
         <div class="flex items-center gap-2 mb-3">
-          <input type="text" [(ngModel)]="inputs.price.lo" name="priceLo"
+          <input
+            type="text"
+            [(ngModel)]="inputs.price.lo"
+            name="priceLo"
             (focus)="$any($event.target).select()"
             (blur)="onInputChange('price', 'lo')"
             (keydown.enter)="onInputChange('price', 'lo')"
-            class="w-full h-12 bg-gray-50 rounded-2xl px-3 text-sm text-center text-navy border-2 border-transparent focus:border-orange/20 focus:bg-white transition-all" />
+            class="w-full h-12 bg-gray-50 rounded-2xl px-3 text-sm text-center text-navy border-2 border-transparent focus:border-orange/20 focus:bg-white transition-all"
+          />
           <span class="text-gray-400 text-sm shrink-0">—</span>
-          <input type="text" [(ngModel)]="inputs.price.hi" name="priceHi"
+          <input
+            type="text"
+            [(ngModel)]="inputs.price.hi"
+            name="priceHi"
             (focus)="$any($event.target).select()"
             (blur)="onInputChange('price', 'hi')"
             (keydown.enter)="onInputChange('price', 'hi')"
-            class="w-full h-12 bg-gray-50 rounded-2xl px-3 text-sm text-center text-navy border-2 border-transparent focus:border-orange/20 focus:bg-white transition-all" />
+            class="w-full h-12 bg-gray-50 rounded-2xl px-3 text-sm text-center text-navy border-2 border-transparent focus:border-orange/20 focus:bg-white transition-all"
+          />
         </div>
-        <p-slider [(ngModel)]="rangeValues" [range]="true"
-          [min]="minPriceLimit" [max]="maxPriceLimit" [step]="1000"
-          (onChange)="onPriceRangeChange()" name="priceSlider" class="w-full" />
+        <p-slider
+          [(ngModel)]="rangeValues"
+          [range]="true"
+          [min]="minPriceLimit"
+          [max]="maxPriceLimit"
+          [step]="1000"
+          (onChange)="onPriceRangeChange()"
+          name="priceSlider"
+          class="w-full"
+        />
       </div>
 
       <div class="flex flex-col justify-start pt-1">
-        <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1">Suprafață</label>
+        <label class="block text-xs font-bold text-navy/40 uppercase mb-2 ml-1"
+          >Suprafață</label
+        >
         <div class="flex items-center gap-2 mb-3">
-          <input type="text" [(ngModel)]="inputs.surface.lo" name="surfaceLo"
+          <input
+            type="text"
+            [(ngModel)]="inputs.surface.lo"
+            name="surfaceLo"
             (focus)="$any($event.target).select()"
             (blur)="onInputChange('surface', 'lo')"
             (keydown.enter)="onInputChange('surface', 'lo')"
-            class="w-full h-12 bg-gray-50 rounded-2xl px-3 text-sm text-center text-navy border-2 border-transparent focus:border-orange/20 focus:bg-white transition-all" />
+            class="w-full h-12 bg-gray-50 rounded-2xl px-3 text-sm text-center text-navy border-2 border-transparent focus:border-orange/20 focus:bg-white transition-all"
+          />
           <span class="text-gray-400 text-sm shrink-0">—</span>
-          <input type="text" [(ngModel)]="inputs.surface.hi" name="surfaceHi"
+          <input
+            type="text"
+            [(ngModel)]="inputs.surface.hi"
+            name="surfaceHi"
             (focus)="$any($event.target).select()"
             (blur)="onInputChange('surface', 'hi')"
             (keydown.enter)="onInputChange('surface', 'hi')"
-            class="w-full h-12 bg-gray-50 rounded-2xl px-3 text-sm text-center text-navy border-2 border-transparent focus:border-orange/20 focus:bg-white transition-all" />
+            class="w-full h-12 bg-gray-50 rounded-2xl px-3 text-sm text-center text-navy border-2 border-transparent focus:border-orange/20 focus:bg-white transition-all"
+          />
         </div>
-        <p-slider [(ngModel)]="surfaceRangeValues" [range]="true"
-          [min]="minSurfaceLimit" [max]="maxSurfaceLimit" [step]="1"
-          (onChange)="onSurfaceRangeChange()" name="surfaceSlider" class="w-full" />
+        <p-slider
+          [(ngModel)]="surfaceRangeValues"
+          [range]="true"
+          [min]="minSurfaceLimit"
+          [max]="maxSurfaceLimit"
+          [step]="1"
+          (onChange)="onSurfaceRangeChange()"
+          name="surfaceSlider"
+          class="w-full"
+        />
       </div>
     </div>
-
   </div>
 
   <!-- Butoane -->
   <div class="flex items-center gap-3 pt-4 border-t border-gray-100">
-    <button type="submit"
-      class="group relative px-12 py-4 bg-orange rounded-2xl text-white font-bold text-lg shadow-xl shadow-orange/20 hover:bg-orange/90 hover:-translate-y-1 transition-all duration-300">
+    <button
+      type="submit"
+      class="group relative px-12 py-4 bg-orange rounded-2xl text-white font-bold text-lg shadow-xl shadow-orange/20 hover:bg-orange/90 hover:-translate-y-1 transition-all duration-300"
+    >
       <span class="flex items-center gap-3">
-        <i class="pi pi-search text-xl group-hover:scale-110 transition-transform"></i>
+        <i
+          class="pi pi-search text-xl group-hover:scale-110 transition-transform"
+        ></i>
         Caută proprietăți
       </span>
     </button>
 
     @if (authService.isAuthenticated()) {
-      <button type="button" (click)="onSaveClick()"
-        class="px-6 py-4 bg-white border-2 border-orange/30 rounded-2xl text-orange font-bold text-lg hover:bg-orange/5 hover:-translate-y-1 transition-all duration-300">
+      <button
+        type="button"
+        (click)="onSaveClick()"
+        class="px-6 py-4 bg-white border-2 border-orange/30 rounded-2xl text-orange font-bold text-lg hover:bg-orange/5 hover:-translate-y-1 transition-all duration-300"
+      >
         <span class="flex items-center gap-2">
           <i class="pi pi-bookmark text-lg"></i>
           Salvează căutarea
@@ -118,5 +192,4 @@
       </button>
     }
   </div>
-
 </form>

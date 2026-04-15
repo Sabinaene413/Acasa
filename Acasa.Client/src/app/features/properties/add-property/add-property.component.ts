@@ -23,11 +23,12 @@ import { City } from '../models/city.model';
 import * as L from 'leaflet';
 import { Subject, debounceTime, takeUntil } from 'rxjs';
 import { GeocodingService } from '../../../core/services/geocoding.service';
+import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'app-add-property',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, NavbarComponent],
+  imports: [ReactiveFormsModule, RouterLink, NavbarComponent, SelectModule],
   templateUrl: './add-property.component.html',
 })
 export class AddPropertyComponent implements OnInit, OnDestroy, AfterViewInit {

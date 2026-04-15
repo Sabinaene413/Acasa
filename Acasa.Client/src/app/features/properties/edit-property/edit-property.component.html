@@ -1,133 +1,215 @@
-<div class="min-h-screen flex flex-col bg-light-gray text-navy font-sans pt-[64px]">
+<div
+  class="min-h-screen flex flex-col bg-light-gray text-navy font-sans pt-[64px]"
+>
   <app-navbar></app-navbar>
 
   <main class="flex-grow py-6 md:py-10 px-4">
-    <div class="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-peach/20">
+    <div
+      class="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden border-4 border-peach/20"
+    >
       <div class="bg-navy p-5 md:p-6 text-white text-center">
-        <h1 class="text-xl md:text-2xl font-extrabold tracking-tight">Editează Anunțul</h1>
-        <p class="text-white/70 mt-1 text-sm">Actualizează detaliile proprietății tale</p>
+        <h1 class="text-xl md:text-2xl font-extrabold tracking-tight">
+          Editează Anunțul
+        </h1>
+        <p class="text-white/70 mt-1 text-sm">
+          Actualizează detaliile proprietății tale
+        </p>
       </div>
 
       @if (isLoading()) {
         <div class="p-20 flex flex-col items-center justify-center space-y-4">
-          <div class="w-12 h-12 border-4 border-orange border-t-transparent rounded-full animate-spin"></div>
+          <div
+            class="w-12 h-12 border-4 border-orange border-t-transparent rounded-full animate-spin"
+          ></div>
           <p class="text-navy/60 font-medium">Se încarcă datele...</p>
         </div>
       }
 
       @if (!isLoading()) {
-        <form [formGroup]="propertyForm" (ngSubmit)="onSubmit()" class="p-5 md:p-8">
+        <form
+          [formGroup]="propertyForm"
+          (ngSubmit)="onSubmit()"
+          class="p-5 md:p-8"
+        >
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-
             <!-- Coloana Stângă -->
             <div class="space-y-8">
-
               <!-- Informații Generale -->
               <div class="space-y-4">
-                <h2 class="text-lg font-bold border-b-2 border-orange/30 pb-1.5 text-navy flex items-center gap-2">
+                <h2
+                  class="text-lg font-bold border-b-2 border-orange/30 pb-1.5 text-navy flex items-center gap-2"
+                >
                   <span class="w-2 h-2 bg-orange rounded-full"></span>
                   Informații Generale
                 </h2>
                 <div class="grid grid-cols-1 gap-4">
                   <div class="space-y-1.5">
-                    <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Titlu Anunț</label>
-                    <input formControlName="title" type="text"
+                    <label
+                      class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1"
+                      >Titlu Anunț</label
+                    >
+                    <input
+                      formControlName="title"
+                      type="text"
                       placeholder="Ex: Apartament 3 camere, zona centrală"
-                      class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm" />
+                      class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
+                    />
                   </div>
                   <div class="space-y-1.5">
-                    <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Descriere Detaliată</label>
-                    <textarea formControlName="description" rows="4"
+                    <label
+                      class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1"
+                      >Descriere Detaliată</label
+                    >
+                    <textarea
+                      formControlName="description"
+                      rows="4"
                       placeholder="Descrie proprietatea, facilitățile și zona..."
-                      class="w-full p-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm resize-none"></textarea>
+                      class="w-full p-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm resize-none"
+                    ></textarea>
                   </div>
                   <div class="space-y-1.5">
-                    <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Adresă Completă</label>
-                    <input formControlName="address" type="text"
+                    <label
+                      class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1"
+                      >Adresă (Strada + Numar)</label
+                    >
+                    <input
+                      formControlName="address"
+                      type="text"
                       placeholder="Strada, Număr, Oraș, Județ"
-                      class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm" />
+                      class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
+                    />
                   </div>
                   <div class="space-y-1.5">
-                    <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Oraș</label>
-                    <select formControlName="cityId"
-                      class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all text-sm appearance-none cursor-pointer">
-                      <option value="" disabled>Selectează un oraș</option>
-                      @for (city of cities(); track city) {
-                        <option [value]="city.id">{{ city.name }}</option>
-                      }
-                    </select>
+                    <label
+                      class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1"
+                      >Oraș</label
+                    >
+                    <p-select
+                      formControlName="cityId"
+                      [options]="cities()"
+                      optionLabel="name"
+                      optionValue="id"
+                      placeholder="Selectează un oraș"
+                      [filter]="true"
+                      filterPlaceholder="Caută orașul..."
+                      [showClear]="true"
+                      class="w-full h-11 !bg-gray-50 !border-2 !rounded-xl !transition-all"
+                      panelStyleClass="custom-realestate-panel"
+                    >
+                    </p-select>
                   </div>
                 </div>
               </div>
 
               <!-- Detalii Tehnice -->
               <div class="space-y-4">
-                <h2 class="text-lg font-bold border-b-2 border-orange/30 pb-1.5 text-navy flex items-center gap-2">
+                <h2
+                  class="text-lg font-bold border-b-2 border-orange/30 pb-1.5 text-navy flex items-center gap-2"
+                >
                   <span class="w-2 h-2 bg-orange rounded-full"></span>
                   Detalii Tehnice & Preț
                 </h2>
                 <div class="grid grid-cols-2 gap-4">
                   <div class="space-y-1.5">
-                    <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Preț (€)</label>
-                    <input formControlName="price" type="number"
-                      class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all text-sm" />
+                    <label
+                      class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1"
+                      >Preț (€)</label
+                    >
+                    <input
+                      formControlName="price"
+                      type="number"
+                      class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all text-sm"
+                    />
                   </div>
                   <div class="space-y-1.5">
-                    <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Suprafață (m²)</label>
-                    <input formControlName="surfaceArea" type="number"
-                      class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all text-sm" />
+                    <label
+                      class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1"
+                      >Suprafață (m²)</label
+                    >
+                    <input
+                      formControlName="surfaceArea"
+                      type="number"
+                      class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all text-sm"
+                    />
                   </div>
                   <div class="space-y-1.5">
-                    <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Dormitoare</label>
-                    <input formControlName="bedrooms" type="number"
-                      class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all text-sm" />
+                    <label
+                      class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1"
+                      >Dormitoare</label
+                    >
+                    <input
+                      formControlName="bedrooms"
+                      type="number"
+                      class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all text-sm"
+                    />
                   </div>
                   <div class="space-y-1.5">
-                    <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Băi</label>
-                    <input formControlName="bathrooms" type="number"
-                      class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all text-sm" />
+                    <label
+                      class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1"
+                      >Băi</label
+                    >
+                    <input
+                      formControlName="bathrooms"
+                      type="number"
+                      class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all text-sm"
+                    />
                   </div>
                 </div>
               </div>
 
               <!-- Locație -->
               <div class="space-y-4">
-                <h2 class="text-lg font-bold border-b-2 border-orange/30 pb-1.5 text-navy flex items-center gap-2">
+                <h2
+                  class="text-lg font-bold border-b-2 border-orange/30 pb-1.5 text-navy flex items-center gap-2"
+                >
                   <span class="w-2 h-2 bg-orange rounded-full"></span>
                   Locație pe hartă
                 </h2>
                 <div class="space-y-2">
-                  <button type="button" (click)="onVerifyLocation()"
+                  <button
+                    type="button"
+                    (click)="onVerifyLocation()"
                     [disabled]="isGeocoding()"
-                    class="w-full h-11 bg-navy/5 border-2 border-navy/20 rounded-xl text-sm font-bold text-navy hover:bg-navy/10 transition-all disabled:opacity-50 flex items-center justify-center gap-2">
+                    class="w-full h-11 bg-navy/5 border-2 border-navy/20 rounded-xl text-sm font-bold text-navy hover:bg-navy/10 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                  >
                     @if (isGeocoding()) {
-                      <div class="w-4 h-4 border-2 border-navy border-t-transparent rounded-full animate-spin"></div>
+                      <div
+                        class="w-4 h-4 border-2 border-navy border-t-transparent rounded-full animate-spin"
+                      ></div>
                       Se caută locația...
                     } @else if (locationConfirmed()) {
                       <i class="pi pi-check text-green-500"></i>
-                      <span class="text-green-600">Locație confirmată — trage pinul pentru a ajusta</span>
+                      <span class="text-green-600"
+                        >Locație confirmată — trage pinul pentru a ajusta</span
+                      >
                     } @else {
                       <i class="pi pi-map-marker"></i>
                       Verifică locația pe hartă
                     }
                   </button>
 
-                  <div #mapContainer class="w-full h-64 rounded-xl overflow-hidden border-2"
+                  <div
+                    #mapContainer
+                    class="w-full h-64 rounded-xl overflow-hidden border-2"
                     [class.border-green-400]="locationConfirmed()"
-                    [class.border-gray-200]="!locationConfirmed()">
-                  </div>
+                    [class.border-gray-200]="!locationConfirmed()"
+                  ></div>
 
                   @if (!locationConfirmed()) {
-                    <p class="text-[10px] text-navy/40 px-1">Completează adresa și orașul, apoi apasă butonul pentru a verifica locația.</p>
+                    <p class="text-[10px] text-navy/40 px-1">
+                      Completează adresa și orașul, apoi apasă butonul pentru a
+                      verifica locația.
+                    </p>
                   }
                 </div>
               </div>
-
             </div>
 
             <!-- Coloana Dreaptă: Imagini -->
             <div class="space-y-6 flex flex-col h-full">
-              <h2 class="text-lg font-bold border-b-2 border-orange/30 pb-1.5 text-navy flex items-center gap-2">
+              <h2
+                class="text-lg font-bold border-b-2 border-orange/30 pb-1.5 text-navy flex items-center gap-2"
+              >
                 <span class="w-2 h-2 bg-orange rounded-full"></span>
                 Galerie Imagini
               </h2>
@@ -135,14 +217,27 @@
               <div class="space-y-4 flex-grow">
                 @if (existingImages().length > 0) {
                   <div class="space-y-2">
-                    <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Imagini Existente</label>
+                    <label
+                      class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1"
+                      >Imagini Existente</label
+                    >
                     <div class="grid grid-cols-3 md:grid-cols-4 gap-3">
                       @for (img of existingImages(); track img) {
-                        <div class="relative group aspect-square rounded-xl overflow-hidden shadow-sm border border-gray-100">
-                          <img [src]="img.url" class="w-full h-full object-cover">
-                          <div class="absolute inset-0 bg-navy/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <button type="button" (click)="removeExistingImage(img.id)"
-                              class="bg-red-500 text-white p-1.5 rounded-full hover:scale-110 transition-transform">
+                        <div
+                          class="relative group aspect-square rounded-xl overflow-hidden shadow-sm border border-gray-100"
+                        >
+                          <img
+                            [src]="img.url"
+                            class="w-full h-full object-cover"
+                          />
+                          <div
+                            class="absolute inset-0 bg-navy/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                          >
+                            <button
+                              type="button"
+                              (click)="removeExistingImage(img.id)"
+                              class="bg-red-500 text-white p-1.5 rounded-full hover:scale-110 transition-transform"
+                            >
                               <i class="pi pi-times text-xs"></i>
                             </button>
                           </div>
@@ -153,23 +248,51 @@
                 }
 
                 <div class="flex items-center justify-center w-full mt-4">
-                  <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-navy/20 rounded-2xl cursor-pointer bg-gray-50 hover:bg-peach/10 transition-colors">
-                    <div class="flex flex-col items-center justify-center pt-4 pb-4">
+                  <label
+                    class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-navy/20 rounded-2xl cursor-pointer bg-gray-50 hover:bg-peach/10 transition-colors"
+                  >
+                    <div
+                      class="flex flex-col items-center justify-center pt-4 pb-4"
+                    >
                       <i class="pi pi-image text-xl mb-2 text-orange"></i>
-                      <p class="text-[10px] font-bold text-navy uppercase tracking-wide">Adaugă fotografii noi</p>
+                      <p
+                        class="text-[10px] font-bold text-navy uppercase tracking-wide"
+                      >
+                        Adaugă fotografii noi
+                      </p>
                     </div>
-                    <input type="file" class="hidden" multiple (change)="onFileChange($event)" accept="image/*" />
+                    <input
+                      type="file"
+                      class="hidden"
+                      multiple
+                      (change)="onFileChange($event)"
+                      accept="image/*"
+                    />
                   </label>
                 </div>
 
                 @if (newPreviews().length > 0) {
                   <div class="grid grid-cols-3 md:grid-cols-4 gap-3">
-                    @for (preview of newPreviews(); track preview; let i = $index) {
-                      <div class="relative group aspect-square rounded-xl overflow-hidden shadow-sm border border-gray-100">
-                        <img [src]="preview" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-navy/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <button type="button" (click)="removeNewImage(i)"
-                            class="bg-red-500 text-white p-1.5 rounded-full hover:scale-110 transition-transform">
+                    @for (
+                      preview of newPreviews();
+                      track preview;
+                      let i = $index
+                    ) {
+                      <div
+                        class="relative group aspect-square rounded-xl overflow-hidden shadow-sm border border-gray-100"
+                      >
+                        <img
+                          [src]="preview"
+                          class="w-full h-full object-cover"
+                        />
+                        <div
+                          class="absolute inset-0 bg-navy/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                        >
+                          <button
+                            type="button"
+                            (click)="removeNewImage(i)"
+                            class="bg-red-500 text-white p-1.5 rounded-full hover:scale-110 transition-transform"
+                          >
                             <i class="pi pi-times text-xs"></i>
                           </button>
                         </div>
@@ -181,17 +304,24 @@
 
               <!-- Butoane Acțiune -->
               <div class="pt-8 mt-auto flex gap-4">
-                <button type="button" routerLink="/contul-meu"
-                  class="flex-1 h-12 border-2 border-navy text-navy rounded-xl font-bold text-sm hover:bg-gray-50 transition-all active:scale-[0.98]">
+                <button
+                  type="button"
+                  routerLink="/contul-meu"
+                  class="flex-1 h-12 border-2 border-navy text-navy rounded-xl font-bold text-sm hover:bg-gray-50 transition-all active:scale-[0.98]"
+                >
                   Anulează
                 </button>
-                <button type="submit" [disabled]="propertyForm.invalid || isSubmitting()"
-                  class="flex-[2] h-12 bg-linear-to-r from-navy to-orange text-white rounded-xl font-bold text-sm md:text-base hover:brightness-110 disabled:grayscale disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg active:scale-[0.98]">
-                  {{ isSubmitting() ? 'Se salvează...' : 'Salvează Modificările' }}
+                <button
+                  type="submit"
+                  [disabled]="propertyForm.invalid || isSubmitting()"
+                  class="flex-[2] h-12 bg-linear-to-r from-navy to-orange text-white rounded-xl font-bold text-sm md:text-base hover:brightness-110 disabled:grayscale disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg active:scale-[0.98]"
+                >
+                  {{
+                    isSubmitting() ? "Se salvează..." : "Salvează Modificările"
+                  }}
                 </button>
               </div>
             </div>
-
           </div>
         </form>
       }

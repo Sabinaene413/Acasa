@@ -14,12 +14,13 @@ import { CityService } from '../../../properties/services/city.service';
 import { AuthService } from '../../../../core/auth.service';
 import { City } from '../../../properties/models/city.model';
 import { County } from '../../../properties/models/county.model';
+import { SelectModule } from 'primeng/select';
 
 
 @Component({
   selector: 'app-property-search-form',
   standalone: true,
-  imports: [FormsModule, CommonModule, Slider],
+  imports: [FormsModule, CommonModule, Slider, SelectModule],
   templateUrl: './property-search-form.component.html',
 })
 export class PropertySearchFormComponent implements OnInit {

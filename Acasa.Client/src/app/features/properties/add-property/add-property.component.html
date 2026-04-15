@@ -75,7 +75,7 @@
                 <div class="space-y-1.5">
                   <label
                     class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1"
-                    >Adresă Completă</label
+                    >Adresă (Strada + Numar)</label
                   >
                   <input
                     formControlName="address"
@@ -94,22 +94,27 @@
                 <div class="space-y-1.5">
                   <label
                     class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1"
-                    >Oraș</label
                   >
-                  <select
+                    Oraș
+                  </label>
+
+                  <p-select
                     formControlName="cityId"
-                    class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all text-sm appearance-none cursor-pointer"
-                    [class.!border-red-500]="isInvalid('cityId')"
+                    [options]="cities()"
+                    optionLabel="name"
+                    optionValue="id"
+                    placeholder="Selectează un oraș"
+                    [filter]="true"
+                    filterPlaceholder="Caută orașul..."
+                    [showClear]="true"
+                    class="w-full h-11 !bg-gray-50 !border-2 !rounded-xl !transition-all"
+                    [class.custom-invalid]="isInvalid('cityId')"
+                    panelStyleClass="custom-realestate-panel"
                   >
-                    <option value="" disabled selected>
-                      Selectează un oraș
-                    </option>
-                    @for (city of cities(); track city) {
-                      <option [value]="city.id">{{ city.name }}</option>
-                    }
-                  </select>
+                  </p-select>
+
                   @if (isInvalid("cityId")) {
-                    <p class="text-red-500 text-[10px] px-1">
+                    <p class="text-red-500 text-[10px] px-1 font-medium">
                       Orașul este obligatoriu.
                     </p>
                   }
