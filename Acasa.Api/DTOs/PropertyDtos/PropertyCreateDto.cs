@@ -1,7 +1,7 @@
 using Acasa.Api.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace Acasa.Api.DTOs
+namespace Acasa.Api.DTOs.PropertyDtos
 {
     public class PropertyCreateDto
     {

@@ -12,11 +12,21 @@
         </div>
 
         <div class="flex-grow text-center md:text-left">
-          <h1 class="text-3xl font-bold text-gray-900 mb-2">Profilul meu</h1>
-          <p class="text-gray-500 flex items-center justify-center md:justify-start gap-2">
-            <i class="pi pi-envelope"></i>
-            {{ authService.currentUser()?.email ?? 'Necunoscut' }}
-          </p>
+          <h1 class="text-3xl font-bold text-gray-900 mb-2">
+            {{ authService.currentUser()?.name ?? 'Profilul meu' }}
+          </h1>
+          <div class="space-y-1">
+            <p class="text-gray-500 flex items-center justify-center md:justify-start gap-2">
+              <i class="pi pi-envelope"></i>
+              {{ authService.currentUser()?.email ?? 'Necunoscut' }}
+            </p>
+            @if (authService.currentUser()?.phoneNumber) {
+              <p class="text-gray-500 flex items-center justify-center md:justify-start gap-2">
+                <i class="pi pi-phone"></i>
+                {{ authService.currentUser()?.phoneNumber }}
+              </p>
+            }
+          </div>
         </div>
 
         <button (click)="logout()"

@@ -1,8 +1,11 @@
 using Acasa.Api.Data;
+using Acasa.Api.DTOs;
+using Acasa.Api.Interfaces;
 using Acasa.Api.Models;
 using Acasa.Api.Services;
 using Acasa.Api.Services.Interfaces;
-using Acasa.Api.Interfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 

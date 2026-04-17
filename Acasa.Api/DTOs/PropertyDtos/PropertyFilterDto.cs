@@ -1,4 +1,4 @@
-﻿namespace Acasa.Api.DTOs
+﻿namespace Acasa.Api.DTOs.PropertyDtos
 {
     public class PropertyFilterDto
     {

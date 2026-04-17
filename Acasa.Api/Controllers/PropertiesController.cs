@@ -1,4 +1,5 @@
 using Acasa.Api.DTOs;
+using Acasa.Api.DTOs.PropertyDtos;
 using Acasa.Api.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

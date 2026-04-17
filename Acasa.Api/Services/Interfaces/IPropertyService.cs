@@ -1,4 +1,5 @@
 using Acasa.Api.DTOs;
+using Acasa.Api.DTOs.PropertyDtos;
 
 namespace Acasa.Api.Interfaces
 {

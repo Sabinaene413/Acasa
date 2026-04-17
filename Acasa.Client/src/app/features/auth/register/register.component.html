@@ -40,6 +40,22 @@
           }
         </div>
 
+        <!-- Telefon -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Număr de Telefon</label>
+          <input formControlName="phoneNumber" type="text" placeholder="07xxxxxxxx"
+            class="w-full h-11 px-4 rounded-xl bg-gray-50 border-2 border-transparent focus:border-orange focus:bg-white outline-none transition-all placeholder:text-gray-400 text-sm"
+            [class.border-red-400]="registerGroup('phoneNumber').invalid && registerGroup('phoneNumber').touched" />
+          @if (registerGroup('phoneNumber').touched) {
+            @if (registerGroup('phoneNumber').errors?.['required']) {
+              <p class="text-red-500 text-[10px] px-1">Numărul de telefon este obligatoriu.</p>
+            }
+            @if (registerGroup('phoneNumber').errors?.['pattern']) {
+              <p class="text-red-500 text-[10px] px-1">Introduceți un număr de telefon valid.</p>
+            }
+          }
+        </div>
+
         <!-- Parolă -->
         <div class="space-y-1.5">
           <label class="text-[11px] font-bold uppercase tracking-wider text-navy/70 px-1">Parolă</label>

@@ -1,5 +1,6 @@
 using Acasa.Api.Data;
 using Acasa.Api.DTOs;
+using Acasa.Api.DTOs.PropertyDtos;
 using Acasa.Api.Interfaces;
 using Acasa.Api.Models;
 using Acasa.Api.Services.Interfaces;

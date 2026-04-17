@@ -30,6 +30,7 @@ export class RegisterComponent {
       {
         name: ['', [Validators.required, Validators.minLength(3)]],
         email: ['', [Validators.required, Validators.email]],
+        phoneNumber: ['', [Validators.required, Validators.pattern(/^[0-9+ ]{10,15}$/)]],
         password: [
           '',
           [Validators.required, Validators.minLength(6), this.passwordStrengthValidator],
@@ -72,8 +73,8 @@ export class RegisterComponent {
 
   onSubmit() {
     if (this.registerForm.valid) {
-      const { name, email, password } = this.registerForm.value;
-      this.authService.register({ name, email, password }).subscribe({
+      const { name, email, phoneNumber, password } = this.registerForm.value;
+      this.authService.register({ name, email, phoneNumber, password }).subscribe({
         next: (response) => {
           this.toastService.success(
             'Succes',

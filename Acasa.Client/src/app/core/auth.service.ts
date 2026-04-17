@@ -22,7 +22,7 @@ export class AuthService {
   }
 
   register(data: any) {
-    return this.http.post(`${this.apiUrl}/register`, data).pipe(
+    return this.http.post(`${this.apiUrl}/api/Account/register`, data).pipe(
       tap((res) => console.log('Register response:', res)),
       catchError(this.handleError),
     );
