@@ -13,5 +13,8 @@
 
         public int? Bedrooms { get; set; }
         public int? Bathrooms { get; set; }
+
+        public int PageNumber { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
     }
 }

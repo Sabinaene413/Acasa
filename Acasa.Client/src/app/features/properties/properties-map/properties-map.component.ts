@@ -70,7 +70,7 @@ export class PropertiesMapComponent implements OnInit {
     this.isLoading.set(true);
     this.propertyService.getFilteredProperties(filters).subscribe({
       next: (data) => {
-        this.properties.set(data);
+        this.properties.set(data.items);
         this.isLoading.set(false);
         this.isSidebarOpen.set(false);
         this.mapComponent.resizeMap();

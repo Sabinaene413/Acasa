@@ -19,7 +19,7 @@ namespace Acasa.Api.Controllers
 
         // GET: api/Properties/filter
         [HttpGet("filter")]
-        public async Task<ActionResult<IEnumerable<PropertyDto>>> FilterProperties([FromQuery] PropertyFilterDto propertyFilterDto)
+        public async Task<ActionResult<PagedResultDto<PropertyDto>>> FilterProperties([FromQuery] PropertyFilterDto propertyFilterDto)
         {
             var result = await _propertyService.GetFilteredPropertiesAsync(propertyFilterDto);
             return Ok(result);

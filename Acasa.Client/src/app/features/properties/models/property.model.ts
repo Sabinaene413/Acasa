@@ -31,6 +31,15 @@ export interface PropertyFilter {
   maxSurfaceArea?: number;
   bedrooms?: number;
   bathrooms?: number;
+  pageNumber?: number;
+  pageSize?: number;
+}
+
+export interface PagedResult<T> {
+  items: T[];
+  totalCount: number;
+  pageNumber: number;
+  pageSize: number;
 }
 
 export const DEFAULT_FILTER: PropertyFilter = {
@@ -42,4 +51,6 @@ export const DEFAULT_FILTER: PropertyFilter = {
   bathrooms: undefined,
   cityId: undefined,
   countyId: undefined,
+  pageNumber: 1,
+  pageSize: 12,
 };

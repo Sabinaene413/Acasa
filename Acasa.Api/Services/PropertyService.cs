@@ -51,7 +51,7 @@ namespace Acasa.Api.Services
             return properties.Select(p => MapToDto(p));
         }
 
-        public async Task<IEnumerable<PropertyDto>> GetFilteredPropertiesAsync(PropertyFilterDto filter)
+        public async Task<PagedResultDto<PropertyDto>> GetFilteredPropertiesAsync(PropertyFilterDto filter)
         {
             if (filter == null)
                 filter = new PropertyFilterDto();
@@ -85,8 +85,20 @@ namespace Acasa.Api.Services
             if (filter.Bathrooms.HasValue)
                 query = query.Where(p => p.Bathrooms == filter.Bathrooms.Value);
 
-            var properties = await query.ToListAsync();
-            return properties.Select(p => MapToDto(p));
+            var totalCount = await query.CountAsync();
+
+            var properties = await query
+                .Skip((filter.PageNumber - 1) * filter.PageSize)
+                .Take(filter.PageSize)
+                .ToListAsync();
+
+            return new PagedResultDto<PropertyDto>
+            {
+                Items = properties.Select(p => MapToDto(p)),
+                TotalCount = totalCount,
+                PageNumber = filter.PageNumber,
+                PageSize = filter.PageSize
+            };
         }
 
         public async Task<PropertyDto> CreatePropertyAsync(PropertyCreateDto propertyCreateDto, string userId)

@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Property, PropertyFilter } from '../models/property.model';
+import { Property, PropertyFilter, PagedResult } from '../models/property.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -18,7 +18,7 @@ export class PropertyService {
     return this.http.get<Property>(`${this.apiUrl}/${id}`);
   }
 
-  getFilteredProperties(filter: PropertyFilter): Observable<Property[]> {
+  getFilteredProperties(filter: PropertyFilter): Observable<PagedResult<Property>> {
     let params = new HttpParams();
     if (filter.minPrice !== undefined && filter.minPrice !== null) params = params.set('MinPrice', filter.minPrice.toString());
     if (filter.maxPrice !== undefined && filter.maxPrice !== null) params = params.set('MaxPrice', filter.maxPrice.toString());
@@ -28,8 +28,11 @@ export class PropertyService {
     if (filter.countyId !== undefined && filter.countyId !== null) params = params.set('CountyId', filter.countyId.toString());
     if (filter.minSurfaceArea !== undefined && filter.minSurfaceArea !== null) params = params.set('MinSurfaceArea', filter.minSurfaceArea.toString());
     if (filter.maxSurfaceArea !== undefined && filter.maxSurfaceArea !== null) params = params.set('MaxSurfaceArea', filter.maxSurfaceArea.toString());
+    
+    if (filter.pageNumber) params = params.set('PageNumber', filter.pageNumber.toString());
+    if (filter.pageSize) params = params.set('PageSize', filter.pageSize.toString());
 
-    return this.http.get<Property[]>(`${this.apiUrl}/filter`, { params });
+    return this.http.get<PagedResult<Property>>(`${this.apiUrl}/filter`, { params });
   }
 
 

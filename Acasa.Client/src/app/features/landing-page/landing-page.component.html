@@ -35,6 +35,14 @@
           [isLoading]="isLoading()"
         >
         </app-property-results-grid>
+
+        <app-pagination
+          [currentPage]="currentFilter().pageNumber || 1"
+          [totalCount]="totalCount()"
+          [pageSize]="currentFilter().pageSize || 12"
+          (pageChange)="onPageChange($event)"
+        >
+        </app-pagination>
       </div>
     </div>
   </main>

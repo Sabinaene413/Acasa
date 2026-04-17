@@ -12,6 +12,7 @@
 
         <p-select
           [(ngModel)]="filter.countyId"
+          name="countyId"
           [options]="counties()"
           optionLabel="name"
           optionValue="id"
@@ -31,6 +32,7 @@
         >
         <p-select
           [(ngModel)]="filter.cityId"
+          name="cityId"
           [options]="cities()"
           optionLabel="name"
           optionValue="id"

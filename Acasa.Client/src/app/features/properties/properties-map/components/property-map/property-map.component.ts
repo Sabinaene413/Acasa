@@ -7,7 +7,7 @@ import 'leaflet.markercluster';
 @Component({
   selector: 'app-property-map-ui',
   standalone: true,
-  template: `<div #mapContainer class="absolute inset-0 z-0"></div>`,
+  templateUrl: './property-map.component.html',
   styles: [`
     :host { display: block; height: 100%; width: 100%; }
     ::ng-deep {
