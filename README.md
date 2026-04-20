@@ -76,5 +76,4 @@
 Once the API is running, you can access the interactive Scalar documentation at:
 - `http://localhost:<port>/scalar/v1` (check your console for the exact port)
 
-## 🤝 Contributing
-Contributions are welcome! Please feel free to submit a Pull Request.
+
