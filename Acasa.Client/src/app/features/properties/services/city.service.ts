@@ -20,6 +20,6 @@ export class CityService {
   }
 
   getCitiesByCounty(countyId: number): Observable<City[]> {
-    return this.http.get<City[]>(`${this.apiUrl}/county/${countyId}`);
+    return this.http.get<City[]>(`${this.apiUrl}?countyId=${countyId}`);
   }
 }
